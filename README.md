@@ -33,3 +33,14 @@ import React, { component } from 'react';
  
  export default ErrorBoundary;
 ```
+
+### Component Lifecycle (`Only available in Class-based Components!`)
+- constructor()
+- getDerivedStateFromProps()
+- getSnapshotBeforeUpdate()
+- componentDidCatch()
+- componentWillUnmount()
+- shouldComponentUpdate()
+- componentDidUpdate()
+- componentDidMount()
+- render()
