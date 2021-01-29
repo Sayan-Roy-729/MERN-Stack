@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import Radium, {StyleRoot} from 'radium'; // npm install --save radium (for adding styling), for media query have to wrap the entire app with StyleRoot
 // import styled from 'styled-components';
 
-import './App.css';
+import classes from './App.css';
 
 // npm install --save styled-components
 
