@@ -21,6 +21,7 @@ const [ personsState, setPersonsState ] = useState({
   ```
   3. Difference between `useState()` and `setState()`:
   - In class based component, this.setState update the selected state, doesn't delete the other specified state. But useState that returns 2nd element as a function that helps to update state, it actually build new state and if there is any state that is not selected, that will be deleted.
+   - Another difference between state and useState is that, in class based component state can't use multiple times. But, useState can be used multiple times. Then, one useState's 2nd element function doesn't modufy other defined useState's state.
   ```js
   const nameChangedHandler = event => {
     setPersonsState({
@@ -58,5 +59,5 @@ const [ personsState, setPersonsState ] = useState({
         My Hobbies: Racing
       </Person>
       ```
-  - Another difference between state and useState is that, in class based component state can't use multiple times. But, useState can be used multiple times. Then, one useState's 2nd element function doesn't modufy other defined useState's state.
+ 
   
