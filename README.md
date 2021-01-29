@@ -35,12 +35,13 @@ import React, { component } from 'react';
 ```
 
 ### Component Lifecycle (`Only available in Class-based Components!`)
-- constructor()
-- getDerivedStateFromProps()
-- getSnapshotBeforeUpdate()
-- componentDidCatch()
-- componentWillUnmount()
-- shouldComponentUpdate()
-- componentDidUpdate()
-- componentDidMount()
-- render()
+- 1. constructor(props)
+- 2. getDerivedStateFromProps(props, state)
+- 3. getSnapshotBeforeUpdate()
+- 4. componentDidCatch()
+- 5. componentWillUnmount()
+- 6. shouldComponentUpdate()
+- 7. componentDidUpdate()
+- 8. componentDidMount()
+- 9. render()
+- 1 --> 2 --> 9 --> 8
