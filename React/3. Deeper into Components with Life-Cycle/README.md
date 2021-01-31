@@ -438,7 +438,8 @@ class App extends Component {
         <button onClick={() => { this.setState({ showCockpit: false }); }}>
           Remove Cockpit
         </button>
-        {/* Wrap JSX with AuthContext for passing the props directly between files, values step should be same that are defined in context file*/}
+        {/* Wrap JSX with AuthContext for passing the props directly between files, 
+        values step should be same that are defined in context file*/}
         <AuthContext.Provider
           value={{
             authenticated: this.state.authenticated,
