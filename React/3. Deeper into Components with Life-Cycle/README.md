@@ -414,4 +414,153 @@ export default React.memo(cockpit);
 ```
 
 
->### Prop-Chain Problem:
+>### Prop-Chain Problem(Context):
+- Define Context
+```js
+import React from 'react';
+
+const authContext = React.createContext({
+  authenticated: false, 
+  login: () => {}
+  });
+
+export default authContext;
+```
+- Use in Parent File
+```js
+import React, {Component} from 'react';
+import AuthContext from '..../context/auth-context.js';
+
+class App extends Component {
+  render () {
+    return (
+      <Aux>
+        <button onClick={() => { this.setState({ showCockpit: false }); }}>
+          Remove Cockpit
+        </button>
+        {/* Wrap JSX with AuthContext for passing the props directly between files, values step should be same that are defined in context file*/}
+        <AuthContext.Provider
+          value={{
+            authenticated: this.state.authenticated,
+            login: this.loginHandler,
+          }}
+        >
+          {this.state.showCockpit ? (
+            <Cockpit
+              title={this.props.appTitle}
+              showPersons={this.state.showPersons}
+              personsLength={this.state.persons.length}
+              clicked={this.togglePersonsHandler}
+            />
+          ) : null}
+          {persons}
+        </AuthContext.Provider>
+      </Aux>
+    );
+  }
+}
+```
+- Use where is required
+- Cockpit File for Login button (Use Context in Functional Component)
+```js
+import React, { useEffect, useRef, useContext } from 'react';
+// useRef for referance in Functional component
+
+import classes from './Cockpit.css';
+import AuthContext from '../../context/auth-context';
+
+const cockpit = (props) => {
+
+  //? Create Context Connection 
+  const authContext = useContext(AuthContext);
+
+  console.log(authContext.authenticated);
+
+  return (
+    <div className={classes.Cockpit}>
+      <h1>{props.title}</h1>
+      <p className={assignedClasses.join(' ')}>This is really working!</p>
+      <button ref = {toggleBtnRef} className={btnClass} onClick={props.clicked}>
+        Toggle Persons
+      </button>
+      {/* Method-1 For Context */}
+      {/* <AuthContext.Consumer>
+        {(context) => <button onClick = {context.login}>Log in</button>}
+      </AuthContext.Consumer> */}
+      
+      {/* Method-2 For Context but have to define authContext in function body*/}
+      <button onClick = {authContext.login}>Log in</button>
+    </div>
+  );
+};
+
+// ?Like shouldComponentUpdate() React.memo check whether have to re-render or not (for functional component)
+export default React.memo(cockpit);
+
+```
+- Person File Where have to render according to the value of context (Context in Class based Components)
+```js
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+import Aux from '../../../hoc/Auxiliary';
+import withClass from '../../../hoc/withClass';
+import classes from './Person.css';
+import AuthContext from '../../../context/auth-context';
+
+class Person extends Component {
+
+  // This is class based. For functional component --> useContext()
+  static contextType = AuthContext;
+  
+  componentDidMount() {
+    // this.context is given by react for Context
+    console.log(this.context.authenticated);
+  }
+
+  render() {
+    console.log('[Person.js] rendering...');
+
+    // Wrap with higher order component (hoc)
+    return (
+      <Aux>
+        {/* Method-1 for Context */}
+        {/* <AuthContext.Consumer>
+          {(context) => context.authenticated ? <p>Authenticated!</p> : <p>Please log in</p>}
+        </AuthContext.Consumer> */}
+        
+        {/* Method-2 for Context but have to define static contextType in class body*/}
+        {this.context.authenticated ? (
+          <p>Authenticated!</p>
+        ) : (
+          <p>Please log in</p>
+        )}
+        
+        <p key="i1" onClick={this.props.click}>
+          I'm {this.props.name} and I am {this.props.age} years old!
+        </p>
+        <p key="i2">{this.props.children}</p>
+        <input
+          key="i3"
+          // ref = {(inputEl) => {this.inputElement = inputEl}}
+          ref={this.inputElementRef}
+          type="text"
+          onChange={this.props.changed}
+          value={this.props.name}
+        />
+      </Aux>
+    );
+  }
+}
+
+// ? Define every props that what types of this props
+Person.PropTypes = {
+  click: PropTypes.func,
+  name: PropTypes.string,
+  age: PropTypes.number,
+  changed: PropTypes.func,
+};
+
+export default withClass(Person, classes.Person);
+
+```
