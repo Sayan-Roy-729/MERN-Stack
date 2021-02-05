@@ -5,6 +5,8 @@ const initialState = {
     counter: 0
 }
 
+// Reducer --> Store --> Subscription --> Dispatching Action
+
 
 // Reducer
 const rootReducer = (state = initialState, action) => {
@@ -33,7 +35,7 @@ store.subscribe(() => {
     console.log('Subscription', store.getState());
 });
 
-// Dispatching Action
+// Dispatching Action (payload)
 store.dispatch({type: 'INC_COUNTER'});
 store.dispatch({type: 'ADD_COUNTER', value: 10});
 console.log(store.getState());
