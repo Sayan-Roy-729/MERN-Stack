@@ -1,31 +1,43 @@
 
 # Deep Drive into React Component & Life-Cycle
 >## Life-Cycle Hooks
+
+![alt text](https://i1.wp.com/programmingwithmosh.com/wp-content/uploads/2018/10/Screen-Shot-2018-10-31-at-1.44.28-PM.png?ssl=1 "Title")<br><br>
+
+
 Lifecycle hooks are only available in class based component, not in functional component.
-- constructor() (Call super(props); **Do:** Setup State; **Don't:** Cause side-effect)
-- getDerivedStateFromProps() (^16.3; when ever props change, **Do:** sync state to props, **Don't:** Cause Side-Effects)
-- getSnapshotBeforeUpdate(prevProps, prevState) (**Do:** Last-minute DOM ops **Don't:** Cause Side-Effects)
-- componentDidCatch()
-- componentWillUnmount()
-- shouldComponentUpdate(nextProps, nextState) (**Do:** Decide whether to continue or not; **Don't:** Cause Side-effects)
-- componentDidUpdate(prevProps, prevState, snapshot) (**Do:** Cause Side-Effect **Don't:** Update State (triggers re-render))
-- componentDidMount() (**Do:** Cause Side-Effects; **Don't:** Update State (triggers re-render))
-- render() (Prepare & Structure the JSX Code)
-**Most Important --> componentDidMount(), shouldComponentUpdate(), componentDidUpdate()**
+- `constructor()` (Call super(props); **Do:** Setup State; **Don't:** Cause side-effect)
+- `getDerivedStateFromProps()` (^16.3; when ever props change, **Do:** sync state to props, **Don't:** Cause Side-Effects)
+- `getSnapshotBeforeUpdate(prevProps, prevState)` (**Do:** Last-minute DOM ops **Don't:** Cause Side-Effects)
+- `componentDidCatch()`
+- `componentWillUnmount()`
+- `shouldComponentUpdate(nextProps, nextState)` (**Do:** Decide whether to continue or not; **Don't:** Cause Side-effects)
+- `componentDidUpdate(prevProps, prevState, snapshot)` (**Do:** Cause Side-Effect **Don't:** Update State (triggers re-render))
+- `componentDidMount()` (**Do:** Cause Side-Effects; **Don't:** Update State (triggers re-render))
+- `render()` (Prepare & Structure the JSX Code)
+**Most Important &#129130; componentDidMount(), shouldComponentUpdate(), componentDidUpdate()**
 
 
 >### Component Lifecycle - Creation
-**constructor(props) --> getDerivedStateFromProps(props, state) --> render() --> Render Child Components --> componentDidMount() --> getDerivedStateFromProps() --> render()**
-- Inside **static getDerivedStateFromProps(props, state)** have to return `state`
+**constructor(props) &#129130; getDerivedStateFromProps(props, state) &#129130; render() &#129130; Render Child Components &#129130; componentDidMount() &#129130; getDerivedStateFromProps() &#129130; render()**
+- Inside **`static getDerivedStateFromProps(props, state)`** have to return `state`
+- **`componentDidMount()`** will be executed for the `first render`.
+- **`componentWillMount()`** is another life cycle that will be removed later.
 
 
 >### Component Lifecycle - Update
-**getDerivedStateFromProps(props, state) --> shouldComponentUpdate(nextProps, nextState) --> render() --> Update Child Component Props --> getSnapshotBeforeUpdate(prevProps, prevState) --> componentDidUpdate(prevProps, prevState, snapshot)**
-- **shouldComponentUpdate(nextProps, nextState)**  returns true or false, if true will be rerender otherwise not.
+**getDerivedStateFromProps(props, state) &#129130; shouldComponentUpdate(nextProps, nextState) &#129130; render() &#129130; Update Child Component Props &#129130; getSnapshotBeforeUpdate(prevProps, prevState) &#129130; componentDidUpdate(prevProps, prevState, snapshot)**
+- **`shouldComponentUpdate(nextProps, nextState)`**  returns true or false, if true will be rerender otherwise not.
+- **`getSnapshotBeforeUpdate(prevProps, prevState)`** is used for last minute DOM Operation like update DOM while user scrolling the page.
 
 
->### useEffect()
+>### Component Lifecycle - State CHanges
+**getDerivedStateFromProps &#129130; shouldComponentUpdate &#129130; render &#129130; Child Component Render &#129130; componentDidUpdate**
+
+
+>### **`useEffect()`** (React hooks)
 - `useEffect()` is the second most important react hook after `useState()` in functional component. This hook is became usefull in functional component to manage like class based component's lifecycle. It behaves like `componentDidMount()`, `shouldComponentUpdate()`, `componentDidUpdate()`
+- It as a default takes a function that will run at every render cycle.
 - It executes for every rerender. It also run when component created. 
 - More than once useEffect() can use inside functional component
 - If wants to execute when one or more that props change and other cases don't run although render is executed, then that props (exam, porps.persons) have to pass as a second argument.
@@ -46,13 +58,13 @@ useEffect(() => {
 }, [props.persons]);
 ```
 
->### Cleaning up with Lifecycle Hooks
-If some clean up is required like remove eventListener or stop timer then `componentWillUnmount()` lifecycle hook is called.
+>### Cleaning up with Lifecycle Hooks **`componentWillUnmount()`**
+If some clean up is required like remove eventListener or stop timer then `componentWillUnmount()` lifecycle hook is called in class based components. Some important code will be here before the component will be removed.
 
->### shouldComponentUpdate() & PureComponent()
+>### **`shouldComponentUpdate()`** & **`PureComponent()`**
 - `nextProps.persons !== this.props.persons` here nextProps.persons is referance types, it points to the persons array. But it that array is changed but pointer is not changed, then condition will be failed because it checkes the pointer. 
-- shouldComponentUpdate() is class based react lifecycle hook. For functional component, `React.memo()` is used.
-- If all the props have to check whether they are changed or not, then beside using the shouldComponentUpdate(), have to extend with PureComponent and it does same work behind the sence.
+- shouldComponentUpdate() is class based react lifecycle hook. For *functional component*, **`React.memo()`** is used.
+- If `all the props` have to check whether they are changed or not, then beside using the shouldComponentUpdate(), have to extend with `PureComponent` and it does same work behind the sence.
 ```js
 import React, {PureComponent} from 'react';
 
@@ -68,10 +80,9 @@ class Persons extends PureComponent {
     }
   }
 }
-
 ```
 
->### React.memo()
+>### **`React.memo()` shouldComponentUpdate() for Functional Component**
 
  - Like shouldComponentUpdate() in class based component, memo() also work same job with functional component. Only wrap with memo() with exporting the functional component.
  - It rerender when the props will change.
@@ -85,8 +96,8 @@ const cockpit = props => {
 export default React.memo(cockpit);
 ```
 
->## Rendering Adacent JSX Elements (hoc => higher order component) `auxiliary.js`
-- Form-1:
+>## Rendering Adacent JSX Elements (hoc &#129130; higher order component) **`auxiliary.js`**
+- Form-1: Must have to return one root element. 
 ```js
 return (
   <div className = {classes.Person}>
@@ -96,10 +107,10 @@ return (
     <p>{this.props.children}</p>
     <input type = "text" onChange = {this.props.changed} value = {this.props.name}/>
   </div>
-)
+);
 ```
 
-- Form-2: In this form, have to use key though it's inconvinient. 
+- Form-2: Can return multiple elements as an array elements. In this form, have to use key though it's inconvinient. 
 ```js
 return [
     <p key = "i1" onClick = {this.props.click}>
@@ -110,7 +121,7 @@ return [
   ];
 ```
 
-- Form-3: 
+- Form-3: ` Aux` Higher Order Component. But in this method, can't use styling classes and other props in this higher top level element. 
 ```js
 const aux = props => props.children;
 
@@ -131,7 +142,7 @@ return (
 )
 ```
 
-- Form-4: From ^16.2, build in Aux Component in React
+- Form-4: From ^16.2, build in Aux Component in React has available. `React.Fragment`
 ```js
 import React from 'react';
 
@@ -146,7 +157,7 @@ return (
 )
 ```
 
-- Form-5:
+- Form-5: Like `Aux` higher order element but in this method, `can use classes` in this hoc for styling.
 ```js
 import React from 'react';
 
@@ -173,7 +184,7 @@ return (
 )
 ```
 
-- Form-6:
+- Form-6: With `Aux` and `withClasses` higher order components, the props used in children elements, cant pass the props to work that can work fine. So `WrappedComponent HOC` is used.
 ```js
 import React from 'react';
 
@@ -190,8 +201,8 @@ export default withClass;
 
 ```js
 import React from 'react';
-import Aux from '....auxiliary.js';
-import withClass from '...withClass.js';
+import Aux from '....auxiliary.js'; // hoc
+import withClass from '...withClass.js'; // hoc
 
 class App extends React.Component {
 
@@ -212,7 +223,7 @@ export default withClass(App, classes.App);
 ```
 
 >## Setting State Correctly
-- Wrong way
+- **Wrong way** because when changing in setState, the setState points the object that is stored in stack memory, don't copy that state. That's why when changes directly through the state, and uses in different places, thats why can't pass the right value through the state that time. 
 ```js
 import React from 'react';
 
@@ -235,7 +246,7 @@ class App extends React.Component {
 }
 ```
 
-- Right way
+- **Right way:** For this have to pass a function which takes prevState and props and does correctly its job.
 ```js
 nameChangeHandler() {
     this.setState((prevState, props) => {
@@ -247,7 +258,7 @@ nameChangeHandler() {
   }
 ```
 
->## PropTypes
+>## **`PropTypes`** - Describe the props
 `npm install --save prop-types`
 ```js
 import React, {Component} from 'react';
@@ -277,8 +288,8 @@ Person.propTypes = {
 export default Person;
 ```
 
->### Referrence(Ref) in Class Based Components:
-- Way-1: Supported in Older React Version
+>## **`Referrence(Ref)`** in Class Based Components:
+- **Way-1:** Supported in *Older React Version.*
 ```js
 return (
     <Aux>
@@ -298,7 +309,7 @@ return (
     );
 ```
 
-- Form-2:
+- **Way-2:** Modern Version React has available
 ```js
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -315,7 +326,7 @@ class Person extends Component {
     this.inputElementRef = React.createRef();
   }
   
-  // To use the referance, have to use the created referance pointer inside componentDidMount; otherwise sometimes throw error
+  // To use the referance, have to use the created referance pointer inside componentDidMount; otherwise sometimes throw error becaue when executes the referance, it will be possible that the referance element is not rendered till now.
   componentDidMount() {
     this.inputElementRef.current.focus();
   }
@@ -352,7 +363,7 @@ Person.PropTypes = {
 
 export default withClass(Person, classes.Person);
 ```
->### Reference in Functional Component
+>## **`Referrence(Ref)`** in Functional Component
 
 ```js
 import React, { useEffect, useRef } from 'react';
@@ -414,8 +425,11 @@ export default React.memo(cockpit);
 ```
 
 
->### Prop-Chain Problem(Context):
-- Define Context
+>## Prop-Chain Problem(**`Context`**):
+Pass props through different child-parent components because a component required like authentication. Then have to pass the authentication state through different childrens via props for a far child component is required. That's why, `context` comes handly.
+
+
+- **Define Context:** Technically, it doesn't have to be an object passing through the `React.createContext()`. You could also have an array, a string, a number etc. as a context value.
 ```js
 import React from 'react';
 
@@ -426,7 +440,7 @@ const authContext = React.createContext({
 
 export default authContext;
 ```
-- Use in Parent File
+- **Use in Parent File:** This `Context` can be used as a component and it should wrap app the parts of the application that need access that context.  
 ```js
 import React, {Component} from 'react';
 import AuthContext from '..../context/auth-context.js';
@@ -461,8 +475,8 @@ class App extends Component {
   }
 }
 ```
-- Use where is required
-- Cockpit File for Login button (Use Context in Functional Component)
+- Use where is required. When have to use the `Context`, have to use `.Consumer` like `AuthContext.Consumer` have to pass a function and that function return jsx or something.
+- Cockpit File for Login button (`Context in Functional Component`)
 ```js
 import React, { useEffect, useRef, useContext } from 'react';
 // useRef for referance in Functional component
@@ -499,7 +513,7 @@ const cockpit = (props) => {
 export default React.memo(cockpit);
 
 ```
-- Person File Where have to render according to the value of context (Context in Class based Components)
+- Person File Where have to render according to the value of context (`Context in Class based Components`). Like parent component, have to wrap the part of the component that has to acces the context.
 ```js
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';

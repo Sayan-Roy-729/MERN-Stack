@@ -1,11 +1,13 @@
 # MERN-Stack
 MERN STACK TUTORIAL
-## M --> MongoDB
-## E --> ExpressJS
-## R --> ReactJS
-## N --> NodeJS
+## M &#129066; MongoDB
+## E &#129066; ExpressJS
+## R &#129066; ReactJS
+## N &#129066; NodeJS
 
+# **`React`**
 
+## **`componentDidCatch(error, info)`**
 ### If sometime failed to render a component (`ErrorBoundary`)(^16. React):
 ```js
 import React, { component } from 'react';
@@ -34,7 +36,7 @@ import React, { component } from 'react';
  export default ErrorBoundary;
 ```
 
-### Component Lifecycle (`Only available in Class-based Components!`)
+## Component Lifecycle (`Only available in Class-based Components!`)
 - 1. constructor(props)
 - 2. getDerivedStateFromProps(props, state)
 - 3. getSnapshotBeforeUpdate(prevProps, prevState)
@@ -46,3 +48,5 @@ import React, { component } from 'react';
 - 9. render()
 - **`1 --> 2 --> 9 --> 8`**
 - **`Component Lifecycle - Update 2 --> 6 --> 9 --> 3 --> 7`**
+
+## [Deep Drive into Component with Component Lifecycle Hoocks, Context, HOC, PropTypes]('./React/3. Deeper into Components with Life-Cycle/README.md)
