@@ -49,4 +49,4 @@ import React, { component } from 'react';
 - **`1 --> 2 --> 9 --> 8`**
 - **`Component Lifecycle - Update 2 --> 6 --> 9 --> 3 --> 7`**
 
-## [Deep Drive into Component with Component Lifecycle Hoocks, Context, HOC, PropTypes]('./React/3. Deeper into Components with Life-Cycle/README.md)
+## [Deep Drive into Component with Component Lifecycle Hoocks, Context, HOC, PropTypes](https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/React/3.%20Deeper%20into%20Components%20with%20Life-Cycle/README.md)
