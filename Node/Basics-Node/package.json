@@ -1,0 +1,15 @@
+{
+  "name": "nodejs_basics",
+  "version": "1.0.0",
+  "description": "NodeJS basic tutorial",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Sayan Roy",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
