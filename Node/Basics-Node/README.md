@@ -21,3 +21,4 @@ server.listen(3000);
 
 ### Node.js Program Lifecycle
 node app.js => Start Script => Parse Code, Register Variables & Functions => Event Loop => Keeps on running as long as there are event listeners registerede
+![Node.js lifecycle and event loop](https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/NodeJS%20Lifecycle%20%26%20Event%20Loop.png)
