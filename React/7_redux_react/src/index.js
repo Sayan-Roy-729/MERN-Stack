@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-// import redux 
+// import redux modules
 import { Provider } from 'react-redux';  // npm install --save react-redux
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk'
@@ -33,6 +33,7 @@ const logger = store => {
     };
 };
 
+// Activate Redux Devtool
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 // Create Redux Store

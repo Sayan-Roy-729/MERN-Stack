@@ -50,6 +50,7 @@ class Counter extends Component {
     }
 }
 
+// Pass state from redux stote to this component
 const mapStateToProps = state => {
     return {
         ctr: state.ctr.counter,
@@ -57,6 +58,7 @@ const mapStateToProps = state => {
     };
 };
 
+// Dispatch ==> Component to Redux Store with Action
 const mapDispatchToProps = dispatch => {
     return {
         OnIncrementCounter: () => dispatch(actionCreators.increment()),
