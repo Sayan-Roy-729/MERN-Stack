@@ -1,0 +1,126 @@
+.Navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #2874f0;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+
+.Navbarbrand {
+  color: white;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+.Navbar_form {
+  display: flex;
+  align-items: center;
+}
+
+.Navbar_Input {
+  width: 30vw;
+  padding: 10px;
+  border: none;
+}
+
+.Navbar_Input:focus {
+  outline: none;
+}
+
+/* Search Button  */
+.Navbar_Button {
+  border: none;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+/* Search Button Icon  */
+.Navbar_Search {
+  padding: 10px;
+  color: #2874f0;
+}
+
+/* Navbar list */
+.Navbar_ul {
+  display: flex;
+  list-style: none;
+  width: 35vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.Navbar_ul li{
+  list-style: none;
+  position: relative;
+  padding: 2px;
+}
+
+.Navbar ul a {
+  text-decoration: none;
+  margin: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+/* Navbar list more icon  */
+.Navbar_more_icon {
+  font-size: 14px;
+}
+
+/* Navbar hidden list */
+.Navbar_hidden {
+  display: none;
+  flex-direction: column;
+  background-color: #fff;
+  position: absolute;
+  top: 26px;
+  padding-inline-start: 0px;
+  width: 200px;
+  box-shadow: 0px 0px 14px #ccc;
+}
+
+.Navbar_hidden li {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  border-top: 1px solid #eee;
+  height: 40px;
+}
+
+.Navbar_hidden li:hover {
+  background-color: rgb(250, 250, 250);
+}
+
+.Navbar_hidden li a{
+  text-decoration: none;
+  color: black;
+  font-size: 12px;
+  margin: 0;
+  padding: 5px;
+}
+
+.Navbar_hidden li a i {
+  color: #2874f0;
+  padding: 0 5px;
+}
+
+/* Navbar login hover display */
+.Navbar_login:hover .Navbar_login_hidden {
+  display: flex;
+}
+
+/* Navbar more hover display */
+.Navbar_more:hover .Navbar_more_hidden {
+  display: flex;
+}
+
+
+
+
+

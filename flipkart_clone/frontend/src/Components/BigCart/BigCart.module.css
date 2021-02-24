@@ -1,0 +1,92 @@
+.BigCard {
+  margin: 20px 0;
+  background-color: white;
+  margin: 10px;
+  padding-bottom: 20px;
+  box-shadow: 0 0 10px #ccc;
+}
+
+.Header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.BigCartTitle {
+  margin-left: 30px;
+  font-size: 25px;
+  display: inline-block;
+  font-weight: 600;
+}
+
+.BigCartClock {
+  margin-left: 20px;
+}
+
+.BigCartClock i {
+  color: #ccc;
+  font-size: 18px;
+  box-shadow: 2px 2px 5px rgb(179, 179, 179);
+  border-radius: 50%;
+} 
+
+.Offer {
+  color: red;
+  margin: 0 10px;
+}
+
+.SecondaryTitle {
+  color: rgb(151, 151, 151);
+}
+
+.Divider {
+  background-color: rgb(255, 255, 255);
+}
+
+.Button {
+  outline: none;
+  border: none;
+  padding: 12px 20px;
+  background-color: #2874f0;
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  margin: 0 20px;
+}
+
+.ProductCarts {
+  width: 3000px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.LeftArrow {
+  position: absolute;
+  padding: 40px 20px;
+  left: 0;
+  background-color: rgb(236, 236, 236);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0 0 5px rgb(168, 168, 168);
+}
+
+.LeftArrow i {
+  font-size: 20px;
+}
+
+.RightArrow {
+  position: absolute;
+  right: 0;
+  padding: 40px 20px;
+  right: 0;
+  background-color: rgb(236, 236, 236);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  box-shadow: 0 0 5px rgb(168, 168, 168);
+}
+
+.Product {
+  display: inline-block;
+
+}

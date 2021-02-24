@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import {Route, Switch} from 'react-router-dom';
 
-function App() {
+import Navbar from './Components/Navbar/Navbar';
+import Navbar2nd from './Components/2ndNavbar/2ndNavbar';
+import Slider from './Components/Slider/Slider';
+import BigCard from './Components/BigCart/BigCart';
+
+const App = props => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar />
+      <Navbar2nd />
+      <Slider />
+      <BigCard />
     </div>
   );
-}
+};
 
 export default App;

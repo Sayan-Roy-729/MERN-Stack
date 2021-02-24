@@ -1,0 +1,85 @@
+.SmallCart {
+  width: 250px;
+  display: inline-block;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.SmallCart:hover .ProductTitle {
+  color: rgb(60, 60, 245);
+}
+
+.CartBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.CartImage {
+  height: 170px;
+  width: 55%;
+  transition: 0.1s;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ProductTitle {
+  margin-block-start: 0.0em;
+  margin-block-end: 0.0em;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 6px 0
+}
+
+.SmallCart h5 {
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+}
+
+.ProductRating {
+  font-weight: bold;
+  background-color: #388e3c;
+  color: white;
+  padding: 2px 5px;  
+  border-radius: 5px;
+  font-size: 11px;
+}
+
+.ProductRating i {
+  font-size: 7px;
+  padding-left: 2px;
+}
+
+.ratingCounts {
+  margin-left: 3px;
+  color: rgb(139, 139, 139);
+}
+
+
+.ProductPrice {
+  margin-block-start: 0em;
+  margin-block-end: 0em;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+.ProductPrice i {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.ActualPrice {
+  text-decoration: overline;
+  color: rgb(139, 139, 139);
+  font-size: 13px;
+}
+
+.Percentage {
+  color: #388e3c;
+  margin-left: 7px;
+  font-size: 14px;
+}

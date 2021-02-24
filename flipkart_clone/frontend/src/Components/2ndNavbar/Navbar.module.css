@@ -1,0 +1,20 @@
+.Categories {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 0 10px #ccc;
+  border-bottom: 1px solid rgb(204, 204, 204);
+}
+
+.Category {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.Category img {
+  height: 60px;
+  width: auto;
+}
