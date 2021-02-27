@@ -8,7 +8,7 @@ MERN STACK TUTORIAL
 ## React Cheat-Sheet
 1. [Lifecycle Hoocks, Context, HOC, PropTypes](https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/React/3.%20Deeper%20into%20Components%20with%20Life-Cycle/README.md)
 2. [React Hooks](https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/React/8_react_hooks/README.md)
-3. [Redux](https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/pdfs/React/CustomRedux.pdf)
+3. [Redux](https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/pdfs/React/CustomRedux.pdf) & [Redux Async API Call](https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/React/redux-tut.jsx)
 
 ## **`componentDidCatch(error, info)`**
 ### If sometime failed to render a component (`ErrorBoundary`)(^16. React):
