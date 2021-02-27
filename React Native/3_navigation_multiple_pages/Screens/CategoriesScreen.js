@@ -46,6 +46,7 @@ CategoriesScreen.navigationOptions = {
   headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
 };
 
+// styles
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
