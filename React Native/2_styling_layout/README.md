@@ -48,6 +48,33 @@ import { Image } from 'react-native';
 />;
 ```
 
+### Background Image -
+
+```js
+import React from 'react';
+import { ImageBackground, View, Text, StyleSheet } from 'react-native';
+
+const App = props => {
+  return (
+    <ImageBcakground source = {{uri: 'url'}} style = {styles.bgImage}>
+      <View style = {styles.title}>
+        <Text numberOfLines = {2}>Background Image is behind in this text</Text>
+      </View>
+    </ImageBackground>
+  );
+};
+
+const styles = StyleSheet.create({
+  bgImage: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'flex-end',
+  }
+});
+
+export default App;
+```
+
 ## 3. **Add Fonts**:
 
 - Step 1: Download fonts and save in a folder
