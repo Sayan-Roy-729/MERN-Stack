@@ -171,7 +171,7 @@ import { FlatList } from 'react-native';
   numColumns={2}
 />;
 ```
-- numColumns create grids, by-default it is 1.
+- numColumns create grids, by-default it is 1. 2 means it creates 2 column grid.
 
 > ## 7. Flex & FlexGrow:
 >
