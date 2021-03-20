@@ -19,7 +19,7 @@
 |   13    |               Add Icon On Header                | [Click]() |
 |   14    |              Tabs-Based Navigation              | [Click]() |
 |   15    |      MaterialBottomTabs (Android Specific)      | [Click]() |
-|   16    |                                                 | [Click]() |
+|   16    |                   Side Drawer                   | [Click]() |
 |   17    |                                                 | [Click]() |
 |   18    |                                                 | [Click]() |
 |   19    |                                                 | [Click]() |
@@ -545,6 +545,21 @@ const MealsNavigator = createStackNavigator({
   }
 });
 
+const FavNavigator = createStackNavigator({
+  Favourite: FovouriteScreen,
+  MealFetail: MealDetailScreen
+}, {
+  // default is card
+  mode: 'modal',
+  initialRouteName: 'CategoryMeals',
+  defaultNavigationOptions: {
+    headerStyle: {
+      backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : '',
+    },
+    headerTinColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
+  }
+});
+
 // define the tab navigator
 const MealsFavTabNavigator = createBottomTabNavigator({
   Meals: {
@@ -556,7 +571,7 @@ const MealsFavTabNavigator = createBottomTabNavigator({
     }
   },
   Favourites: {
-    screen: FavouriteScreen,
+    screen: FavNavigator,
     navigationOptions: {
       tabBarLabel: 'Favourites',
       tabBarIcon: (tabInfo) => {
@@ -648,4 +663,174 @@ const MealsFavTabNavigator = createMaterialBottomTabNavigation({
 });
 
 export default createAppContainer(MealsFavTabNavigator);
+```
+
+## **`Side Drawer`**:
+
+`npm install --save react-navigation-drawer`
+
+```js
+import React from 'react';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createAppContainer } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+
+import CategoriesScreen from '../Screens/CategoriesScreen';
+import CategoryMealsScreen from '../Screens/CategoryMealsScreen';
+import MealDetailScreen from '../Screens/MealDetailScreen';
+import FavouriteScreen from '../screens/FavouriteScreen';
+import FiltersScreen from '../screens/FiltersScreen';
+
+const MealsNavigator = createStackNavigator({
+  Categories: CategoriesScreen,
+  CategoryMeals: {
+    screen: CategoryMealsScreen,
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : '',
+      },
+      // geaderTintColor is for header title style
+      headerTintColor: Platform.OS === 'android' : 'white' : Colors.primaryColor
+    }
+  },
+  MealDetail: MealDetailScreen,
+}, {
+  // default is card
+  mode: 'modal',
+  initialRouteName: 'CategoryMeals',
+  defaultNavigationOptions: {
+    headerStyle: {
+      backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : '',
+    },
+    headerTinColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
+  }
+});
+
+const FavNavigator = createStackNavigator({
+  Favourite: FavoriteScreen,
+  MealDetail: MealDetailScreen
+}, {
+  // default is card
+  mode: 'modal',
+  initialRouteName: 'CategoryMeals',
+  defaultNavigationOptions: {
+    headerStyle: {
+      backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : '',
+    },
+    headerTinColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
+  }
+});
+
+// define the tab navigator
+const MealsFavTabNavigator = createBottomTabNavigator({
+  Meals: {
+    screen: MealsNavigator,
+    navigationOptions: {
+      tabBarIcon: (tabInfo) => {
+        return <Ionicons name = 'ios-restaurant' size = {25} color = {tabInfo.tintColor}/>
+    }
+    }
+  },
+  Favourites: {
+    screen: FavNavigator,
+    navigationOptions: {
+      tabBarLabel: 'Favourites',
+      tabBarIcon: (tabInfo) => {
+        return <Ionicons name = 'ios-star' size = {25} color = {tabInfo.tintColor}/>
+      }
+    }
+  }
+}, {
+  tabBarOptions: {
+    activeTintColor: Colors.accentColor,
+  }
+});
+
+const FiltersNavigator = createStackNavigator({
+  Filters: FiltersScreen
+});
+
+// Drawer fine here, to change the configuration, like header title styles, add these in the stack
+// Navigator (here, FiltersNavigator)
+const MainNavigator = createDrawerNavigator({
+  MealsFavs: MealsFavTabNavigator,
+  Filters: FiltersNavigator
+});
+
+
+export default createAppContainer(MainNavigator);
+```
+
+- In that container which component will be in drawer
+
+```js
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+
+const FilterScreen = (props) => {
+  return (
+    <View>
+      <Text>Some Filter code here</Text>
+    </View>
+  );
+};
+
+FilterScreen.navigationOptions = (navData) => {
+  return (
+    headerTitle: 'Filter Meals',
+    headerLeft: (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item title="menu" iconName="ios-menu" onPress={() => {
+          navData.navigation.toggleDrawer();
+          // also have another drawer functionality
+          // navData.navigation.openDrawer()
+        }} />
+      </HeaderButtons>
+    ),
+  );
+};
+
+const styles = StyleSheet.create({});
+
+export default FilterScreen;
+```
+
+- Configure that screen where the drawer button should show like CategoriesScreen and other
+
+```js
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
+import HeaderButton from '../components/HeaderButton';
+
+const CategoriesScreen = (props) => {
+  return (
+    <View>
+      <Text>Some Filter code here</Text>
+    </View>
+  );
+};
+
+// Configure header
+CategoriesScreen.navigationOptions = (navData) => {
+  return (
+    headerTitle: 'Filter Meals',
+    headerLeft: (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item title="menu" iconName="ios-menu" onPress={() => {
+          navData.navigation.toggleDrawer();
+          // also have another drawer functionality
+          // navData.navigation.openDrawer()
+        }} />
+      </HeaderButtons>
+    ),
+  );
+};
+
+const styles = StyleSheet.create({});
+
+export default CategoriesScreen;
 ```
