@@ -21,8 +21,7 @@ class MyApp extends StatelessWidget {
 }
 ```
 Result of the above code -->
-![hello](https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/1.jpg)
-<img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/1.jpg" height = "300">
+<img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/1.jpg" height = "500">
 
 ### Improve litter by removing black background
 ```dart
@@ -45,10 +44,10 @@ class MyApp extends StatelessWidget {
 }
 ```
 Result of the above code -->
-![flutter](https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/2.jpg)
+<img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/2.jpg" height = "500">
 
 ### Stateless & Stateful Widgets:
-![flutter](https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/3.png)
+<img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/3.png" height = "700">
 
 ### Private Properties:
 To prevent to use the class and the class properties and objects to other files, add `_` before the definition. E.g.
@@ -90,7 +89,7 @@ class _MyAppState extends State<MyApp> {
 
 ### `final` keyword:
 In StatelessWidget, sometime it gives warning that some class properties (which are for input data to the class) can be changed internally but the class or widget is Stateless, so it gives warning.
-![flutter](https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/4.png)
+<img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/4.png" height = "400">
 To solve this issue, `final` keyword is used to tell the flutter is that, the value of that properties will never changed internally.
 ```dart
 import 'package:flutter/material.dart';
