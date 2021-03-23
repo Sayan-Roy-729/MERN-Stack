@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'food/style.css' %}">
+    <title>Document</title>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a href="http://localhost:8000/food/" class="navbar-brand">Food App</a>
+
+        <div class="navbar">
+            <a href="{% url 'food:create_item' %}" class="nav-item text-white nav-link">Add Item</a>
+            <a href="#" class="nav-item text-white nav-link">Delete Item</a>
+            <a href="#" class="nav-item text-white nav-link">View Item</a>
+        </div>
+    </nav>
+
+    {% block body %}
+    {% endblock %}
+</body>
+</html>
