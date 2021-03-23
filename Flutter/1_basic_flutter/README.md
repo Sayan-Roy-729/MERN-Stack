@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
 ```
 Result of the above code -->
 ![hello](https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/1.jpg)
+<img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/1.jpg" height = "300">
 
 ### Improve litter by removing black background
 ```dart
