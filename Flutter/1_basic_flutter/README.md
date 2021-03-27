@@ -1,11 +1,12 @@
 # basic_flutter_1
 
-- Create a new flutter project `flutter create <projectName>`
-- Can run the flutter project `flutter run` or in vs code run with `run without debugging`
+-   Create a new flutter project `flutter create <projectName>`
+-   Can run the flutter project `flutter run` or in vs code run with `run without debugging`
 
 ## Get Started
 
 ### Simple Hello on the screen:
+
 ```dart
 import 'package:flutter/material.dart';
 
@@ -20,10 +21,12 @@ class MyApp extends StatelessWidget {
   }
 }
 ```
+
 Result of the above code -->
 <img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/1.jpg" height = "500">
 
 ### Improve litter by removing black background
+
 ```dart
 import 'package:flutter/material.dart';
 
@@ -43,13 +46,16 @@ class MyApp extends StatelessWidget {
   }
 }
 ```
+
 Result of the above code -->
 <img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/2.jpg" height = "500">
 
 ### Stateless & Stateful Widgets:
+
 <img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/3.png" height = "700">
 
 ### Private Properties:
+
 To prevent to use the class and the class properties and objects to other files, add `_` before the definition. E.g.
 
 ```dart
@@ -84,13 +90,16 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: [
-            Text(questions[_questionIndex]),
+            Text(questions[_questionIndex]))
+            ))}},
 ```
 
-### `final` keyword:
+### `final` vs `const` keyword:
+
 In StatelessWidget, sometime it gives warning that some class properties (which are for input data to the class) can be changed internally but the class or widget is Stateless, so it gives warning.
-<img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/4.png" height = "400">
+<img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/4.png" height = "400" />
 To solve this issue, `final` keyword is used to tell the flutter is that, the value of that properties will never changed internally.
+
 ```dart
 import 'package:flutter/material.dart';
 
@@ -106,7 +115,32 @@ class Question extends StatelessWidget {
 }
 ```
 
+Now `const`. Const is for compile time constant. It will never change through out the app. But `final` keyword is run time constant. After the value is initializing the value, then the value is not changed.<br>
+Another case of `const` where you want to use.
+
+```dart
+var dummy = ['Hello'];
+dummy.add('Sayan');
+print(dummy);
+```
+This code will execute perfectly. But below code will not, because rather than const the variable, you const the value that is assigned in the variable. So can't change the value and it throws errors.
+
+```dart
+var dummy = const ['Hello'];
+dummy.add('Sayan');
+print(duppy);
+```
+
+But below code will be executed perfectly. Because you const the variable, not the value.
+
+```dart
+const dummy = ['Hello'];
+dummy.add('Sayan');
+print(duppy);
+```
+
 ### How style the widgets (`Container` & `Text`):
+
 ```dart
 Container(
   width: double.infinity,
@@ -120,6 +154,7 @@ Container(
 ```
 
 ### Enums & Multiple Constructors:
+
 ```dart
 class Person {
   String name;
@@ -143,3 +178,99 @@ void main() {
   print(p3.age);
 }
 ```
+
+### Mapping through the list to the surrounding widget:
+
+```dart
+var questions = [
+  {
+    'questionText': 'What\'s your favourite color?',
+    'answers': [
+      'Black',
+      'Red',
+      'Green',
+      'White',
+    ],
+  },
+  {
+    'questionText': 'What\'s your favourite animal?',
+    'answers': [
+      'Rabbit',
+      'Snake',
+      'Elephant',
+      'Lion',
+    ],
+  },
+  {
+    'questionText': 'Who\'s your favourite instructor?',
+    'answers': [
+      'Max',
+      'Max',
+      'Max',
+      'Max',
+    ],
+  },
+];
+
+Column(
+  children: [
+    Question(questions[_questionIndex]['questionText']),
+    ...(questions[_questionIndex]['answers'] as List<String>)
+        .map((answer) {
+      return Answer(_answerQuestion, answer);
+    }).toList()
+  ],
+),
+```
+### `Center Widget`:
+To center a widget horizontally and vertically, then this widget is helpful.
+```dart
+Center(
+  child: Text('You did it!'),
+)
+```
+
+### `Getter`:
+In a class, when the widgets are used and don't want to use directly the class properties, that's mean that you want to modify the class properties then `getter` is used. e.g.
+```dart
+import 'package:flutter/material.dart';
+
+class Result extends StatelessWidget {
+  final int resultScore;
+
+  Result(this.resultScore);
+
+  // Set getter
+  String get resultPhrase {
+    String resultText;
+
+    if (resultScore <= 8) {
+      resultText = 'You are awesome and innocent!';
+    } else if (resultScore <= 12) {
+      resultText = 'Pretty likeable!';
+    } else if (resultScore <= 16) {
+      resultText = 'You are ... strange?!';
+    } else {
+      resultText = 'You are so bad!';
+    }
+
+    return resultText;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        resultPhrase,
+        style: TextStyle(
+          fontSize: 36,
+          fontWeight: FontWeight.bold,
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+}
+```
+
+### Convert old widget button to new widget button:
