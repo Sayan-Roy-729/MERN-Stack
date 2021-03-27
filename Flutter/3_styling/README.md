@@ -1,6 +1,34 @@
 # styling
 
-A new Flutter project.
+## Index:
+
+| SL. NO. |            Topic             |                                                                Link                                                                 |
+| :-----: | :--------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
+|    1    |        Column Widget         |                   [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#column-widget)                    |
+|    2    |       Container Widget       |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#container-widget)                  |
+|    3    |         Text Widget          |                    [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#text-widget)                     |
+|    4    |         Format Date          |           [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#format-date-with-intl-package)            |
+|    5    |       TextField Widget       |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#textfield-widget)                  |
+|    6    | SingleChildScrollView Widget |            [click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#singlechildscrollview-widget)            |
+|    7    |       ListView Widget        |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#listview-widget)                   |
+|    8    |         Icon Button          | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#icon-button-add-to-appbar-and-floatingactionbutton) |
+|    9    |       Button on AppBar       | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#icon-button-add-to-appbar-and-floatingactionbutton) |
+|   10    |     FloatingActionButton     | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#icon-button-add-to-appbar-and-floatingactionbutton) |
+|   11    |      Bottom Sheet Modal      |                 [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#bottom-sheet-modal)                 |
+|   12    |   Widget Property in Class   |              [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#widget-property-in-class)              |
+|   13    |            Theme             |                       [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#theme)                        |
+|   14    |          Add Image           |                     [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#add-image)                      |
+|   15    |       Add Assets Image       |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#add-assets-image)                  |
+|   16    |       SizedBox Widget        |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#sizedbox-widget)                   |
+|   17    | FractionallySizedBox Widget  |            [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#fractionallysizedbox-widget)             |
+|   18    |         Stack Widget         |                    [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#stack-widget)                    |
+|   19    |       Flexible Widget        |                      [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#flexible)                      |
+|   20    |       Expanded Widget        |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#expanded-widget)                   |
+|   21    |       FittedBox Widget       |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#fittedbox-widget)                  |
+|   22    |        Padding Widget        |                   [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#padding-widget)                   |
+|   23    |       ListTile Widget        |               [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#listtile--card-widget)                |
+|   24    |         Card Widget          |               [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#listtile--card-widget)                |
+|   25    |         Date Picker          |                     [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#datepicker)                     |
 
 ## `Column` widget:
 
@@ -591,7 +619,9 @@ class _NewTransactionState extends State<NewTransaction> {
 ```
 
 ## Theme:
+
 For theming, the theme properties have to define inside the MaterialApp.
+
 ```dart
 class MyApp extends StatelessWidget {
   @override
@@ -627,6 +657,7 @@ class MyApp extends StatelessWidget {
 ```
 
 Use the defined theme
+
 ```dart
 Text(
     'Using the theme',
@@ -657,8 +688,8 @@ Container(
 )
 ```
 
-
 ## `SizedBox` Widget:
+
 This is the widget which is used to separate two other widget next to each other. It takes height and width with or without child.
 
 ```dart
@@ -683,6 +714,7 @@ Column(
 ```
 
 ## `FractionallySizedBox` Widget:
+
 This widget allows to create a box as a fraction of another value. The `heightFactor` and `widthFactor` takes the value between 0 to 1 and according to that, it takes height and width of the parent height and width.
 
 ```dart
@@ -699,7 +731,40 @@ FractionallySizedBox(
 
 ## `Stack` Widget:
 
+This widget helps to create a stack of widgets and very useful to create 3d views.
+
+```dart
+Container(
+  height: 60,
+  width: 10,
+  child: Stack(
+    children: <Widget>[
+      Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 1.0,
+          ),
+          color: Color.fromRGBO(220, 220, 220, 1),
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+      FractionallySizedBox(
+        heightFactor: spendingPctOfTotal,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      ),
+    ],
+  ),
+)
+```
+
 ## `Flexible`:
+
 This widget is used when the child height and width goes on to the other child's content, mainly it prevent the overflow.<br>
 Here, ChartBat is custom widget.
 
@@ -725,17 +790,19 @@ If two next widgets are wrapped with `Flexible` widget with `fit: FlexFit.tight`
 `Flex: 1` is the by-default. Two `Flexible` widget get equal available space. If `Flex: 2` is set to the first `Flexible` widget and `Flex: 1` to the 2nd `Flexible` widget, then the first widget takes 2 times space of the second widget. It means that the first widget takes 2/3 of available space and the second one takes 1/3 available scape because flex 2 + flex 1 = 3 total space.<br>
 
 ## `Expanded` Widget:
-The replacement of `Flexible widget` of `fit: FlexFit.tight`. 
+
+The replacement of `Flexible widget` of `fit: FlexFit.tight`.
 
 ## `FittedBox` Widget:
+
 This widget forces its child into the available space.
+
 ```dart
 FittedBox(child: Text('\$${spendingAmount.toStringAsFixed(0)}'), )
 ```
 
-
-
 ## `Padding` Widget:
+
 Alternative of `Container` widget if you want to give only padding to the `Container` Widget.
 
 ```dart
@@ -761,7 +828,9 @@ Padding(
 ```
 
 ## `ListTile` & `Card` Widget:
+
 This is used to create beautiful list with circle avatar.
+
 ```dart
 Card(
   elevation: 5,
@@ -782,14 +851,22 @@ Card(
       ),
     ),
     title: Text(
-      transactions[index].title,
+      'Main Title',
       style: Theme.of(context).textTheme.headline6,
     ),
     subtitle: Text(
-      DateFormat.yMMMd().format(transactions[index].date),
+      'SubTitle',
+    ),
+    // Right side of the list
+    trailing: IconButton(
+      icon: Icon(
+        Icons.delete,
+      ),
+      color: Theme.of(context).errorColor,
+      onPressed: () => deleteTx(transactions[index].id),
     ),
   ),
-)
+);
 ```
 
 ## DatePicker:
