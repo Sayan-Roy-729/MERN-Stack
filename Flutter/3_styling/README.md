@@ -1193,4 +1193,154 @@ This widget helps to adjust the widget tree where there are top notch or somethi
 ```dart
 SafeArea(child: SingleChildScrollView(),);
 ```
+
 ---
+
+## Widget Lifecycle:
+
+### Stateless Widgets:
+
+Constructor Function => build()
+
+## Stateful Widget:
+
+Constructor Function => initState() => build() => setState() => didUpdateWidget() => build() => dispose()
+
+```dart
+class NewTransaction extends StatefulWidget {
+  final Function addTx;
+
+  NewTransaction(this.addTx);
+
+  @override
+  _NewTransactionState createState() => _NewTransactionState();
+}
+
+class _NewTransactionState extends State<NewTransaction> {
+
+  _NewTransactionState() {
+    print('Constructor NewTransaction State');
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    // Here make http request or data from server
+    // Here, don't allow to use setState
+    print('NewTransaction init state');
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(NewTransaction oldWidget) {
+    // TODO: implement didUpdateWidget
+    print('NewTransaction didUpdateWidget');
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose; when widget is removed then this is called
+    print('NewTransaction dispose');
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('Widget Lifecycle');
+  }
+}
+```
+
+## App Lifecycle:
+
+| Lifecycle State Name |                   When is it hit?                   |
+| :------------------: | :-------------------------------------------------: |
+|       inactive       |       App is inactive, no user input received       |
+|        paused        |   App not visible to user, running in background    |
+|       resumed        | App is (again) visible and responding to user input |
+|      suspending      |        App is about to be suspended (exited)        |
+
+```dart
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+// Create Mixing by `with` keyword
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+
+  // When the lifecycle of the app changes, want to go to the certain observer
+  // and call `didChangedAppLifecycleState` method
+  @override
+  void initState() {
+    WidgetsBinding,instance.addObserver(this);
+    super.initState();
+  }
+
+  // This method is called when the lifecycle of the app will change
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+  }
+
+  @override
+  dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+}
+```
+
+## `Key & super(key: key)`:
+
+Every widget in flutter can have an key.
+
+```dart
+import 'dart:math';
+import 'package:flutter/material.dart';
+
+class TransactionItem extends StatefulWidget {
+  const TransactionItem({
+    Key key,
+    @required this.transaction,
+    @required this.deleteTx,
+  }) : super(key: key);
+
+  final Transaction transaction,
+  final Function deleteTx;
+
+  @override
+  _TransactionItemState createState() => _TransactionItemState();
+}
+
+class _TransactionItemState extends State<TransactionItem> {
+
+  Color _bgColor;
+
+  @override
+  void initState() {
+    const availableColors = [Colors.red, Colors.black, Colors.blue, Colors.purple];
+    _bgColor = availableColors[Random().nextInt(4)];
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text('Hello World!', textColor: _bgColor,),
+    );
+  }
+}
+```
+When calling or using the Widget Class, When passing the keys, there are two types of key, `UniqueKey` and `ValueKey`. `UniqueKey` is not recommended to use because when a simple widget updates, then the `UniqueKey` will generate a new key and re-render the whole Widget though there is no require to re-render so much. This problem solves by `ValueKey` and what is assigned it takes that don't change for every small update and thus the whole widget is not re-render and increase the performance of the app.  
+```dart
+ListView(
+  children: transactions.map((item) => TransactionItem(
+    // key: UniqueKey(),
+    key: ValueKey(item.id),
+    transaction: item,
+    deleteTx: deleteTx.
+  )).toList();
+);
+```
