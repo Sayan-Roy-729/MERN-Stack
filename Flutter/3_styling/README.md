@@ -2,35 +2,64 @@
 
 ## Index:
 
+### Different Widgets
+
 | SL. NO. |            Topic             |                                                                Link                                                                 |
 | :-----: | :--------------------------: | :---------------------------------------------------------------------------------------------------------------------------------: |
 |    1    |        Column Widget         |                   [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#column-widget)                    |
 |    2    |       Container Widget       |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#container-widget)                  |
 |    3    |         Text Widget          |                    [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#text-widget)                     |
 |    4    |         Format Date          |           [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#format-date-with-intl-package)            |
-|    5    |       TextField Widget       |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#textfield-widget)                  |
-|    6    | SingleChildScrollView Widget |            [click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#singlechildscrollview-widget)            |
-|    7    |       ListView Widget        |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#listview-widget)                   |
-|    8    |         Icon Button          | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#icon-button-add-to-appbar-and-floatingactionbutton) |
-|    9    |       Button on AppBar       | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#icon-button-add-to-appbar-and-floatingactionbutton) |
-|   10    |     FloatingActionButton     | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#icon-button-add-to-appbar-and-floatingactionbutton) |
-|   11    |      Bottom Sheet Modal      |                 [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#bottom-sheet-modal)                 |
-|   12    |   Widget Property in Class   |              [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#widget-property-in-class)              |
-|   13    |            Theme             |                       [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#theme)                        |
-|   14    |          Add Image           |                     [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#add-image)                      |
-|   15    |       Add Assets Image       |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#add-assets-image)                  |
-|   16    |       SizedBox Widget        |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#sizedbox-widget)                   |
-|   17    | FractionallySizedBox Widget  |            [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#fractionallysizedbox-widget)             |
-|   18    |         Stack Widget         |                    [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#stack-widget)                    |
-|   19    |       Flexible Widget        |                      [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#flexible)                      |
-|   20    |       Expanded Widget        |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#expanded-widget)                   |
-|   21    |       FittedBox Widget       |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#fittedbox-widget)                  |
-|   22    |        Padding Widget        |                   [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#padding-widget)                   |
-|   23    |       ListTile Widget        |               [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#listtile--card-widget)                |
-|   24    |         Card Widget          |               [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#listtile--card-widget)                |
-|   25    |         Date Picker          |                     [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#datepicker)                     |
-|   26    |      FlatButton Widget       |                                                              [Click]()                                                              |
-|   27    |        Switch Widget         |                                                              [Click]()                                                              |
+|    5    |      FlatButton Widget       |                 [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#flatbutton-widget)                  |
+|    6    |       TextField Widget       |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#textfield-widget)                  |
+|    7    | SingleChildScrollView Widget |            [click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#singlechildscrollview-widget)            |
+|    8    |       ListView Widget        |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#listview-widget)                   |
+|    9    |         Icon Button          | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#icon-button-add-to-appbar-and-floatingactionbutton) |
+|   10    |       Button on AppBar       | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#icon-button-add-to-appbar-and-floatingactionbutton) |
+|   11    |     FloatingActionButton     | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#icon-button-add-to-appbar-and-floatingactionbutton) |
+|   12    |      Bottom Sheet Modal      |                 [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#bottom-sheet-modal)                 |
+|   13    |   Widget Property in Class   |              [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#widget-property-in-class)              |
+|   14    |            Theme             |                       [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#theme)                        |
+|   15    |          Add Image           |                     [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#add-image)                      |
+|   16    |       Add Assets Image       |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#add-assets-image)                  |
+|   17    |       SizedBox Widget        |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#sizedbox-widget)                   |
+|   18    | FractionallySizedBox Widget  |            [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#fractionallysizedbox-widget)             |
+|   19    |         Stack Widget         |                    [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#stack-widget)                    |
+|   20    |       Flexible Widget        |                      [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#flexible)                      |
+|   21    |       Expanded Widget        |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#expanded-widget)                   |
+|   22    |       FittedBox Widget       |                  [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#fittedbox-widget)                  |
+|   23    |        Padding Widget        |                   [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#padding-widget)                   |
+|   24    |       ListTile Widget        |               [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#listtile--card-widget)                |
+|   25    |         Card Widget          |               [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#listtile--card-widget)                |
+|   26    |         Date Picker          |                     [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#datepicker)                     |
+|   27    |        Switch Widget         |                   [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#switch-widget)                    |
+
+---
+
+### Responsiveness:
+
+| SL. NO. |                  Topic                  |                                                                              Link                                                                              |
+| :-----: | :-------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|    1    |   Device Height & Width (Media Query)   |                           [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#device-height-mediaquery)                            |
+|    2    |      textScaleFactor (Media Query)      |                          [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#textscalefactor-mediaquery)                           |
+|    3    |  LayoutBuilder Widget (Height, Width)   |                             [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#layoutbuilder-widget)                              |
+|    4    | Restrict Device Orientation as Portrait |                        [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#device-orientation-as-portrait)                         |
+|    5    |         Find Device Orientation         | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#showing-different-content-based-on-device-orientation-find-device-orientation) |
+|    6    |     Adjust Soft KeyBoard For Input      |                      [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#adjust-softkeyboard-for-user-input)                       |
+|    7    |      Checking Device Platform (OS)      |                           [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#checking-device-platform)                            |
+|    8    |             SafeArea Widget             |                                [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#safearea-widget)                                |
+
+---
+
+### Internal of Flutter:
+
+| SL. NO. |         Topic         |                                                Link                                                |
+| :-----: | :-------------------: | :------------------------------------------------------------------------------------------------: |
+|    1    |   Widget LifeCycle    | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#widget-lifecycle)  |
+|    2    |     App Lifecycle     |   [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#app-lifecycle)   |
+|    3    | Key & super(key: key) | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#key--superkey-key) |
+
+---
 
 ## `Column` widget:
 
@@ -1202,7 +1231,7 @@ SafeArea(child: SingleChildScrollView(),);
 
 Constructor Function => build()
 
-## Stateful Widget:
+### Stateful Widget:
 
 Constructor Function => initState() => build() => setState() => didUpdateWidget() => build() => dispose()
 
@@ -1333,7 +1362,9 @@ class _TransactionItemState extends State<TransactionItem> {
   }
 }
 ```
-When calling or using the Widget Class, When passing the keys, there are two types of key, `UniqueKey` and `ValueKey`. `UniqueKey` is not recommended to use because when a simple widget updates, then the `UniqueKey` will generate a new key and re-render the whole Widget though there is no require to re-render so much. This problem solves by `ValueKey` and what is assigned it takes that don't change for every small update and thus the whole widget is not re-render and increase the performance of the app.  
+
+When calling or using the Widget Class, When passing the keys, there are two types of key, `UniqueKey` and `ValueKey`. `UniqueKey` is not recommended to use because when a simple widget updates, then the `UniqueKey` will generate a new key and re-render the whole Widget though there is no require to re-render so much. This problem solves by `ValueKey` and what is assigned it takes that don't change for every small update and thus the whole widget is not re-render and increase the performance of the app.
+
 ```dart
 ListView(
   children: transactions.map((item) => TransactionItem(
