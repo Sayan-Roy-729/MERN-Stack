@@ -29,6 +29,8 @@
 |   23    |       ListTile Widget        |               [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#listtile--card-widget)                |
 |   24    |         Card Widget          |               [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#listtile--card-widget)                |
 |   25    |         Date Picker          |                     [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/3_styling#datepicker)                     |
+|   26    |      FlatButton Widget       |                                                              [Click]()                                                              |
+|   27    |        Switch Widget         |                                                              [Click]()                                                              |
 
 ## `Column` widget:
 
@@ -116,6 +118,32 @@ DateFormat('yyyy-MM-dd').format(tx.date);
 DateFormat('yyyy/MM/dd').format(tx.date);
 DateFormat.yMMMd().format(tx.date);
 DateFormat.E().format(weekDay);
+```
+
+## `FlatButton` Widget:
+
+-   Use Case - I: Without `Icon`
+
+```dart
+FlatButton(
+    child: Text('Add Transcation'),
+    textColor: Colors.purple,
+    onPressed: () {
+        print(titleInput);
+        print(amountInput);
+    },
+)
+```
+
+-   Use Case - II: With `Icon and text`
+
+```dart
+FlatButton.icon(
+  textColor: Theme.of(context).errorColor,
+  onPressed: () => deleteTx(transactions[index].id),
+  icon: Icon(Icons.delete),
+  label: Text('Delete'),
+)
 ```
 
 ## `TextField` Widget:
@@ -916,3 +944,253 @@ Container(
   ),
 )
 ```
+
+## `Switch` Widget:
+
+Switch is toggle like button. For this widget, **`statefulWidget`** is required.
+
+```dart
+bool _showChart = false;
+
+Row(
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: <Widget>[
+    Text('Show Chart'),
+    Switch(
+      value: _showChart,
+      onChanged: (value) {
+        setState(() {
+          _showChart = value;
+        });
+      },
+    ),
+  ],
+)
+```
+
+---
+
+# Responsiveness:
+
+## Device Height (`MediaQuery`):
+
+```dart
+Container(
+  height: (MediaQuery.of(context).size.height -
+          appBar.preferredSize.height -
+          MediaQuery.of(context).padding.top) *
+      0.4,
+  child: Chart(_recentTransactions),
+)
+```
+
+`MediaQuery.of(context).size.height` gives the total height of the device screen. In this height. the `AppBar` height and `StatusBar` height are also included. So deduct the height of AbbBar, the total AppBar widget store in a variable called `appBar` and use that. To get the height of the appbar, `appBar.preferredSize.height` is used and to deduct the height of the statusbar, `MediaQuery.of(contest).padding.top` is used. Last have to multiply `0.4` according to the requirement of the height.
+
+## `textScaleFactor` ('MediaQuery'):
+
+The `MediaQuery` offers way more than that of height and width. On particularly interesting property is the `textScaleFactor` property.
+
+```dart
+final curScaleFactor = MediaQuery.of(context).textScaleFactor;
+```
+
+`textScaleFactor` tells you by how much text output in the app should be scaled. Users can change this in their mobile phone / device settings.<br>
+Depending on your app, you might want to consider using this piece of information when setting font sizes.
+_Consider this example:_
+
+```dart
+Text('Always the same size!', style: TextStyle(fontSize: 20));
+```
+
+This text ALWAYS has a size of 20 device pixels, no matter what the user changed in his/her device settings.<br>
+
+```dart
+Text('This changes!', style: TextStyle(fontSize: 20 * curScaleFactor));
+```
+
+This text on the other hand also has a size of 20 if the user didn't change anything in the settings (because `textScaleFactor` by default is 1). But if changes were made, the font size of this text respects the user settings.
+
+## `LayoutBuilder` Widget:
+
+In depth of the widget tree, there the height calculation is not possible so much. So, in that case, `LayoutBuilder` takes place.
+
+```dart
+LayoutBuilder(builder: (context, constraints) {
+  return Column(children: <Widget>[
+    Container(
+      height: constraints.maxHeight * 0.7,
+      child: Text('maxHeight is the height specified to the parent Widget Column and this container widget takes 70% height of the height'),
+    ),
+  ],);
+});
+```
+
+## Device Orientation as Portrait:
+
+Restrict the device into portrait mode, if the device is set as landscape more though, the orientation of the app is not changed.
+
+```dart
+import 'package:flutter/services.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  runApp(MyApp());
+}
+```
+
+## Showing Different Content Based on Device Orientation (Find Device Orientation):
+
+```dart
+final _isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
+if (_isLandscape)
+  Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      Text('Show Chart'),
+      Switch(
+        value: _showChart,
+        onChanged: (value) {
+          setState(() {
+            _showChart = value;
+          });
+        },
+      ),
+    ],
+  ),
+if (!_isLandscape)
+  Container(
+    height: (MediaQuery.of(context).size.height -
+            appBar.preferredSize.height -
+            MediaQuery.of(context).padding.top) *
+        0.3,
+    child: Chart(_recentTransactions),
+  ),
+if (!_isLandscape) txListWidget,
+if (_isLandscape)
+  _showChart
+      ? Container(
+          height: (MediaQuery.of(context).size.height -
+                  appBar.preferredSize.height -
+                  MediaQuery.of(context).padding.top) *
+              0.7,
+          child: Chart(_recentTransactions),
+        )
+      : txListWidget,
+```
+
+## Adjust SoftKeyboard For User Input:
+
+```dart
+Container(
+    padding: EdgeInsets.only(
+      top: 10,
+      left: 10,
+      right: 10,
+      // This gives the information about anything that's lapping into the view (here softKeyboard)
+      bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+    ),
+    child: Column(...
+```
+
+```dart
+Card(
+  elevation: 5,
+  child: Container(
+    padding: EdgeInsets.only(
+      top: 10,
+      left: 10,
+      right: 10,
+      // This gives the information about anything that's lapping into the view (here softKeyboard)
+      bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        TextField(
+          decoration: InputDecoration(
+            labelText: 'Title',
+          ),
+          controller: _titleController,
+          onSubmitted: (value) => _submitData(),
+        ),
+        TextField(
+          decoration: InputDecoration(
+            labelText: 'Amount',
+          ),
+          keyboardType: TextInputType.number,
+          controller: _amountController,
+          onSubmitted: (value) => _submitData(),
+        ),
+        Container(
+          height: 70,
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Text(
+                  _selectedDate == null
+                      ? 'No Date Chosen!'
+                      : 'Picked Date: ${DateFormat.yMd().format(_selectedDate)}',
+                ),
+              ),
+              FlatButton(
+                textColor: Theme.of(context).primaryColor,
+                child: Text(
+                  'Choose Date',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onPressed: _presentDatePicker,
+              ),
+            ],
+          ),
+        ),
+        RaisedButton(
+          child: Text('Add Transcation'),
+          color: Theme.of(context).primaryColor,
+          textColor: Theme.of(context).textTheme.button.color,
+          onPressed: _submitData,
+        ),
+      ],
+    ),
+  ),
+)
+```
+
+## Checking Device Platform:
+
+-   This below switch will automatically adjust with device platform by using `Switch.adaptive()`.
+
+```dart
+Switch.adaptive(
+  activeColor: Theme.of(context).accentColor,
+  value: _showChart,
+  onChanged: (value) {
+    setState(() {
+      _showChart = value;
+    });
+  },
+)
+```
+
+-   Checking Device Platform:
+
+```dart
+import 'dart.io';
+
+Platform.isIOS ? Container() : FloatingActionButton();
+```
+
+## `SafeArea` Widget:
+
+This widget helps to adjust the widget tree where there are top notch or something where widgets can't take places, for that `SafeArea` widget is used.
+
+```dart
+SafeArea(child: SingleChildScrollView(),);
+```
+---
