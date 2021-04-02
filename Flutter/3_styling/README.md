@@ -1034,6 +1034,26 @@ GridView(
 )
 ```
 
+`GridView` with builder.
+
+```dart
+GridView.builder(
+  padding: const EdgeInsets.all(10.0),
+  itemCount: loadedProducts.length,
+  itemBuilder: (context, index) => ProductItem(
+    loadedProducts[index].id,
+    loadedProducts[index].title,
+    loadedProducts[index].imageUrl,
+  ),
+  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: 2,
+    childAspectRatio: 3 / 2,
+    crossAxisSpacing: 10,
+    mainAxisSpacing: 10,
+  ),
+)
+```
+
 ## `GestureDetector` Widget:
 
 To register the user events, this widget is used. But this widget does not give any visualization effect like `ripple effect`. For that, `InkWell Widget` is used.
