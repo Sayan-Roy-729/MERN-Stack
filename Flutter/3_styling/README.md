@@ -118,6 +118,20 @@ Text(
 )
 ```
 
+Another example:
+
+```dart
+Text(
+  'Text Widget with softWrap & Overflow',
+  style: TextStyle(
+    fontSize: 26,
+    color: Colors.white,
+  ),
+  softWrap: true,
+  overflow: TextOverflow.fade,
+)
+```
+
 ## Format Date with [intl](https://pub.dev/packages/intl) package:
 
 `flutter packages get`
@@ -997,6 +1011,84 @@ Row(
 )
 ```
 
+## `GridView` Widget:
+
+To create grid and want to change the content in grid way, this widget is for that purpose.<br>
+There is also many different types of build-in grid. And like `ListView`, this `GridView` also have `.builder` for many grid items to optimise the performance of the app.
+
+```dart
+GridView(
+  padding: const EdgeInsets.all(25),
+  children: DUMMY_CATEGORIES
+      .map((catData) => CategoryItem(catData.title, catData.color))
+      .toList(),
+  // Sliver means the scalable area of the screen
+  // GridDelegate => Layouts the grid
+  // WithMaxCrossAxisExtent => Max Width for each grid item
+  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+    maxCrossAxisExtent: 200,
+    childAspectRatio: 3 / 2,
+    crossAxisSpacing: 20,
+    mainAxisSpacing: 20,
+  ),
+)
+```
+
+## `GestureDetector` Widget:
+
+To register the user events, this widget is used. But this widget does not give any visualization effect like `ripple effect`. For that, `InkWell Widget` is used.
+
+```dart
+GestureDetector(
+  onTap: ...,
+  onDoubleTap: ...,
+);
+```
+
+## `InkWell` Widget:
+
+This widget is same as `GestureDetector`, but it creates the _ripple effects_ when events are done.
+
+```dart
+void selectCategory(BuildContext context) {
+  // Change the screen
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) {
+        return CategoryMealsScreen();
+      },
+    ),
+  );
+  // Navigator.of(context).pushNamed(routeName);
+  // Navigator.of(context).pushReplacement(newRoute);
+}
+
+
+InkWell(
+  onTap: () => selectCategory(context),
+  splashColor: Theme.of(context).primaryColor,
+  borderRadius: BorderRadius.circular(15),
+  child: Container(
+    padding: const EdgeInsets.all(15),
+    child: Text(
+      title,
+      style: Theme.of(context).textTheme.headline6,
+    ),
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          color.withOpacity(0.7),
+          color,
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      borderRadius: BorderRadius.circular(15),
+    ),
+  ),
+)
+```
+
 ---
 
 # Responsiveness:
@@ -1278,6 +1370,39 @@ class _NewTransactionState extends State<NewTransaction> {
   Widget build(BuildContext context) {
     return Text('Widget Lifecycle');
   }
+}
+```
+
+Sometimes when `Navigator` is used that time inside the `initState` the context is not available because the `initState` is called before the child widgets is rendered. So that time, the `context` is not available inside the `initState`. To solve this problem, `didChangeDependencies` is used.<br><br>
+`didChangeDependencies` will be triggered essentially whenever the reference of the state changed which also means it will be called the widget that belongs to state has been fully initialized and we can tab into the context. It will still run for build runs.<br>
+It will only applicable inside stateful widget. And this `didChangeDependencies` is run couple of times before when your requirements because changing some dependencies internally in the flutter. So initialized a property to the State class and update it inside the lifecycle to run that part when you have required.
+
+```dart
+_loadedData = false;
+
+@override
+void initState() {
+  super.initState();
+}
+
+// It will be triggered essentially whenever the reference of the state changed
+// which also means it will be called the widget that belongs to state has been fully
+// initialized and we can tab into the context. It will still run for build runs.
+@override
+void didChangeDependencies() {
+
+  if (!_loadedData) {
+    final routeArgs =
+      ModalRoute.of(context).settings.arguments as Map<String, String>;
+    final categoryId = routeArgs['id'];
+    categoryTitle = routeArgs['title'];
+
+    displayedMeals = DUMMY_MEALS.where((meal) {
+      return meal.categories.contains(categoryId);
+    }).toList();
+  }
+  _loadedData = true;
+  super.didChangeDependencies();
 }
 ```
 
