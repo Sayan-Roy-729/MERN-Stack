@@ -44,3 +44,21 @@ void main() {
     // And only can inherit with only one Object. But mixin can add as many as you want.
 }
 ```
+
+# Futures & Async Code:
+
+```dart
+void main() {
+    var result = 1 + 1;
+    var myFuture = Future(() {
+        return 'Hello';
+    });
+    print('This run first!');
+    myFuture
+        .then((result) => print(result))
+        .catch((error) {
+            print(error);
+        });
+    print('This is also runs before the future is done!');
+}
+```

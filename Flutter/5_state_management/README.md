@@ -406,7 +406,9 @@ class ProductItem extends StatelessWidget {
   }
 }
 ```
+
 The `child` of the `Consumer` widget.
+
 ```dart
 Consumer<Product> (
   builder: (context, product, child) => IconButton(
@@ -454,7 +456,6 @@ class MyApp extends StatelessWidget {
   }
 }
 ```
-
 
 ---
 
@@ -515,6 +516,7 @@ GridTile(
     ),
 );
 ```
+
 ## `PopupMenuButton` Widget:
 
 <img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/10.png" height = "500"/>
@@ -564,6 +566,7 @@ Chip(
 ```
 
 ## `Spacer` Widget:
+
 When using row and arranging the children widgets with space-between or other something, then one content have to arrange in left and other have to right, then add this widget in middle of them.
 
 ```dart
@@ -605,7 +608,7 @@ import '../widgets/cart_item.dart' as ci; // If two class is same, then use as k
 
 ## `Dismissible` Widget:
 
-In android, if you swipe left to right or right to left then some icon or button is came up and something happened like delete an item. 
+In android, if you swipe left to right or right to left then some icon or button is came up and something happened like delete an item.
 
 <img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/12.png" height = "550" alt = "Flutter"/>
 
@@ -681,8 +684,10 @@ Dismissible(
 # User Interaction:
 
 ## Open Drawer on some other button press:
+
 This `Scaffold` will only work when the widget where this scaffold is used for open side drawer, has no scaffold. So there will be no two or more than two Scaffold in a widget. </br></br>
 This drawer will open when the nearest scaffold has defined the drawer.
+
 ```dart
 onPressed: () {
   cart.addItem(product.id, product.price, product.title);
@@ -1012,3 +1017,372 @@ class _EditProductScreenState extends State<EditProductScreen> {
 }
 ```
 
+# HTTP Request (Talk with Backend) Post Request:
+
+Install http package from [here](https://pub.dev/packages/http/install)
+
+```dart
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+
+void addProduct(Product product) {
+  final url = Uri.https(
+      'flutter-55717-default-rtdb.firebaseio.com', '/products.json');
+
+  http
+      .post(
+    url,
+    body: json.encode({
+      'title': product.title,
+      'description': product.description,
+      'imageUrl': product.imageUrl,
+      'price': product.price,
+      'isFavourite': product.isFavourite,
+    }),
+  )
+      .then((response) {
+    final newProduct = Product(
+      title: product.title,
+      description: product.description,
+      imageUrl: product.imageUrl,
+      price: product.price,
+      id: json.decode(response.body)['name'],
+    );
+    _items.add(newProduct);
+  });
+
+  notifyListeners();
+}
+```
+
+## Add Loading Spinner:
+
+Modify above code that returns a future. Loading spinner usually used to display that user have to wait. For that this code have to return a `Future` that data is loaded in server or not. So convert the code from `void` function to `Future`. If simple return a future outside the `http` method, then that will return with out waiting the data is loaded on server because talking with server is also `Future` and don't wait for this. And also can't define inside the `http` method. So return the `http` method itself because after executing the then block, every then block internally return `Future`. So return the `http` method itself is a good `Future`. And if any error occurred in sending the request then the execution will go to the `catchError` block resolve the error, though this returns `Future`.
+
+```dart
+Future<void> addProduct(Product product) {
+  final url = Uri.https(
+      'flutter-55717-default-rtdb.firebaseio.com', '/products.json');
+
+  return http
+      .post(
+    url,
+    body: json.encode({
+      'title': product.title,
+      'description': product.description,
+      'imageUrl': product.imageUrl,
+      'price': product.price,
+      'isFavourite': product.isFavourite,
+    }),
+  )
+      .then((response) {
+    final newProduct = Product(
+      title: product.title,
+      description: product.description,
+      imageUrl: product.imageUrl,
+      price: product.price,
+      id: json.decode(response.body)['name'],
+    );
+    _items.add(newProduct);
+    notifyListeners();
+  }).catchError((error) {
+    print(error);
+    throw error;
+  });
+}
+```
+
+Now show the loading spinner.
+
+```dart
+_isLoading = false;
+
+// the logic when the spinner will execute
+Provider.of<Products>(context, listen: false)
+  .addProduct(_editedProduct)
+  .catchError((error) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('An error occurres!'),
+        content: Text('Something went wrong.'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Okay'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
+    );
+  })
+  .then((value) {
+setState(() {
+  _isLoading = false;
+});
+
+Navigator.of(context).pop();
+
+// Now main loading spinner
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Edit Product'),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.save),
+          onPressed: _saveForm,
+        ),
+      ],
+    ),
+    body: _isLoading
+        ? Center(
+          // This is for the spinner
+            child: CircularProgressIndicator(),
+          )
+        : Padding()
+}
+```
+
+## `async` & `await` & 'finally':
+
+Above code just changed into `async` & `wait`
+
+```dart
+Future<void> addProduct(Product product) async {
+  final url = Uri.https(
+      'flutter-55717-default-rtdb.firebaseio.com', '/products.json');
+
+  try {
+    final response = await http.post(
+      url,
+      body: json.encode({
+        'title': product.title,
+        'description': product.description,
+        'imageUrl': product.imageUrl,
+        'price': product.price,
+        'isFavourite': product.isFavourite,
+      }),
+    );
+
+    final newProduct = Product(
+      title: product.title,
+      description: product.description,
+      imageUrl: product.imageUrl,
+      price: product.price,
+      id: json.decode(response.body)['name'],
+    );
+    _items.add(newProduct);
+    notifyListeners();
+  } catch (error) {
+    print(error);
+    throw error;
+  }
+}
+```
+
+And the spinner part
+
+```dart
+// Here async function name is not pasted though has there.
+try {
+  await Provider.of<Products>(context, listen: false)
+      .addProduct(_editedProduct);
+} catch (error) {
+  await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text('An error occurres!'),
+      content: Text('Something went wrong.'),
+      actions: <Widget>[
+        FlatButton(
+          child: Text('Okay'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        )
+      ],
+    ),
+  );
+} finally {
+  setState(() {
+    _isLoading = false;
+  });
+  Navigator.of(context).pop();
+}
+```
+
+## Best way to fetch data from the server:
+
+When fetch the data from the server, have to create `get request`. So first create a function that talk to the server in the provider file. 
+
+```dart
+Future<void> fetchAndSetProducts() async {
+  final url = Uri.https(
+    'flutter-55717-default-rtdb.firebaseio.com',
+    '/products.json',
+  );
+
+  try {
+    final response = await http.get(url);
+    print(json.decode(response.body));
+  } catch (error) {
+    throw error;
+  }
+}
+```
+
+After defining the method, the have to call that function. The data is required in a app widget. So from that widget have to call the provider.
+
+```dart
+var _isInit = true;
+
+@override
+void initState() {
+  // ! WON"T WORK BECAUSE context isn't available when this widget is rendered
+  Provider.of<Products>(context).fetchAndSetProducts(); 
+  
+  // ! So below method can do though after executing all the widget and then this called
+  // ! So it will delay to fetch the data from the server
+  Future.delayed(Duration.zero).then((value) {
+    Provider.of<Products>(context).fetchAndSetProducts();
+  });
+  super.initState();
+}
+
+// But best way to call the method is from here.
+@override
+void didChangeDependencies() {
+  if (_isInit) {
+    Provider.of<Products>(context).fetchAndSetProducts();
+  }
+  super.didChangeDependencies();
+}
+```
+
+## Swipe down to Refresh the Page (`RefreshIndicator` Widget):
+
+```dart
+// The refresh function
+Future<void> _refreshProducts(BuildContext context) async {
+  await Provider.of<Products>(context, listen: false).fetchAndSetProducts();
+}
+
+// Implement the method
+Scaffold(
+  appBar: AppBar(
+    title: const Text('Your Products'),
+    actions: <Widget>[
+      IconButton(
+        icon: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.of(context).pushNamed(EditProductScreen.routeName);
+        },
+      ),
+    ],
+  ),
+  drawer: AppDrawer(),
+  // Simply define this widget
+  body: RefreshIndicator(
+    onRefresh: () => _refreshProducts(context),
+    child: Padding()
+  )
+)
+```
+
+## Optimistic Updating:
+
+```dart
+class HttpException implements Exception {
+  final String message;
+
+  HttpException(this.message);
+
+  @override
+  String toString() {
+    return message;
+    // return super.toString(); // Instance of HttpException
+  }
+}
+```
+
+And use the our custom error
+
+```dart
+Future<void> deleteProduct(String id) async {
+  final url = Uri.https(
+    'flutter-55717-default-rtdb.firebaseio.com',
+    '/products/$id.json',
+  );
+  final existingProductIndex =
+      _items.indexWhere((element) => element.id == id);
+  var exitingProduct = _items[existingProductIndex];
+
+  final response = await http.delete(url);
+
+  _items.removeAt(existingProductIndex);
+
+  notifyListeners();
+  if (response.statusCode >= 400) {
+    _items.insert(existingProductIndex, exitingProduct);
+    notifyListeners();
+    throw HttpException('Could not delete product.');
+  }
+
+  exitingProduct = null;
+
+  _items.insert(existingProductIndex, exitingProduct);
+  notifyListeners();
+}
+```
+
+## `FutureBuilder` Widget:
+
+For more info,
+- [Medium Blog](https://medium.com/nonstopio/flutter-future-builder-with-list-view-builder-d7212314e8c9)
+- [GeeksForGeeks Blog](https://www.geeksforgeeks.org/flutter-futurebuilder-widget/)
+- [StackOverflow Discussion](https://stackoverflow.com/questions/51983011/when-should-i-use-a-futurebuilder)
+
+```dart
+@override
+Widget build(BuildContext context) {
+  // final orderData = Provider.of<Orders>(context);
+
+  return Scaffold(
+    appBar: AppBar(
+      title: Text('Your Orders'),
+    ),
+    drawer: AppDrawer(),
+    // Define the futureBuilder
+    body: FutureBuilder(
+      future: Provider.of<Orders>(context, listen: false).fetchAndSetOrders(),
+      builder: (context, dataSnapshot) {
+        if (dataSnapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
+          if (dataSnapshot.error != null) {
+            // Do error handling stuff
+            return Center(
+              child: Text('An error occurred'),
+            );
+          } else {
+            return Consumer<Orders>(
+              builder: (context, orderData, child) => ListView.builder(
+                itemCount: orderData.orders.length,
+                itemBuilder: (context, index) =>
+                    OrderItem(orderData.orders[index]),
+              ),
+            );
+          }
+        }
+      },
+    ),
+  );
+}
+```
