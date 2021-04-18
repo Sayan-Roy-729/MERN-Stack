@@ -42,6 +42,10 @@ class Products with ChangeNotifier {
   ];
 
   // var _showFavoritesOnly = false;
+  final String authToken;
+  final String userId;
+
+  Products(this.authToken, this.userId, this._items);
 
   // To restrict the direct access the data, add the data as private and
   // create a getter that returns the copy of the data
@@ -70,30 +74,47 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
   //
-  Future<void> fetchAndSetProducts() async {
-    final url = Uri.https(
-      'flutter-55717-default-rtdb.firebaseio.com',
-      '/products.json',
-    );
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    // final url = Uri.https(
+    //   'flutter-55717-default-rtdb.firebaseio.com',
+    //   '/products.json',
+    // );
+    //
+    final filterString =
+        filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : "";
+
+    var url = Uri.parse(
+        'https://flutter-55717-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterByUser');
 
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      final List<Product> loadedProducts = [];
 
       if (extractedData == null) {
         return;
       }
 
+      url = Uri.parse(
+          'https://flutter-55717-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken');
+
+      final favouriteResponse = await http.get(url);
+
+      final favoriteData = json.decode(favouriteResponse.body);
+
+      final List<Product> loadedProducts = [];
+
       extractedData.forEach((key, value) {
-        loadedProducts.add(Product(
-          id: key,
-          title: value['title'],
-          description: value['description'],
-          price: value['price'],
-          imageUrl: value['imageUrl'],
-          isFavourite: value['isFavourite'],
-        ));
+        loadedProducts.add(
+          Product(
+            id: key,
+            title: value['title'],
+            description: value['description'],
+            price: value['price'],
+            imageUrl: value['imageUrl'],
+            isFavourite:
+                favoriteData == null ? false : favoriteData[key] ?? false,
+          ),
+        );
       });
       _items = loadedProducts;
       notifyListeners();
@@ -103,10 +124,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> addProduct(Product product) async {
-    final url = Uri.https(
-      'flutter-55717-default-rtdb.firebaseio.com',
-      '/products.json',
-    );
+    final url = Uri.parse(
+        'https://flutter-55717-default-rtdb.firebaseio.com/products.json?auth=$authToken&orderBy="creatorId"&equalTo="$userId"');
 
     try {
       final response = await http.post(
@@ -116,7 +135,7 @@ class Products with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
-          'isFavourite': product.isFavourite,
+          'creatorId': userId,
         }),
       );
 
@@ -138,10 +157,13 @@ class Products with ChangeNotifier {
   Future<void> updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     if (prodIndex >= 0) {
-      final url = Uri.https(
-        'flutter-55717-default-rtdb.firebaseio.com',
-        '/products/$id.json',
-      );
+      // final url = Uri.https(
+      //   'flutter-55717-default-rtdb.firebaseio.com',
+      //   '/products/$id.json',
+      // );
+
+      final url = Uri.parse(
+          'https://flutter-55717-default-rtdb.firebaseio.com//products/$id.json?auth=$authToken');
 
       http.patch(
         url,
@@ -161,10 +183,13 @@ class Products with ChangeNotifier {
   }
 
   Future<void> deleteProduct(String id) async {
-    final url = Uri.https(
-      'flutter-55717-default-rtdb.firebaseio.com',
-      '/products/$id.json',
-    );
+    // final url = Uri.https(
+    //   'flutter-55717-default-rtdb.firebaseio.com',
+    //   '/products/$id.json',
+    // );
+
+    final url = Uri.parse(
+        'https://flutter-55717-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken');
     final existingProductIndex =
         _items.indexWhere((element) => element.id == id);
     var exitingProduct = _items[existingProductIndex];

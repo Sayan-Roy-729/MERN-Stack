@@ -1218,7 +1218,7 @@ try {
 
 ## Best way to fetch data from the server:
 
-When fetch the data from the server, have to create `get request`. So first create a function that talk to the server in the provider file. 
+When fetch the data from the server, have to create `get request`. So first create a function that talk to the server in the provider file.
 
 ```dart
 Future<void> fetchAndSetProducts() async {
@@ -1238,14 +1238,54 @@ Future<void> fetchAndSetProducts() async {
 
 After defining the method, the have to call that function. The data is required in a app widget. So from that widget have to call the provider.
 
+### If error already known, then configure the try-catch block in a little:
+
+```dart
+try {
+  if (_authMode == AuthMode.Login) {
+    await Provider.of<Auth>(context, listen: false).login(
+      _authData['email'],
+      _authData['password'],
+    );
+  } else {
+    // Sign user up
+    await Provider.of<Auth>(context, listen: false).signup(
+      _authData['email'],
+      _authData['password'],
+    );
+  }
+} on HttpException catch (error) {
+  var errorMessage = 'Authentication failed';
+
+  if (error.toString().contains('EMAIL_EXISTS')) {
+    errorMessage = 'This email address is already  in use.';
+  } else if (error.toString().contains('INVALID_EMAIL')) {
+    errorMessage = 'This is not valid email address';
+  } else if (error.toString().contains('WEAK_PASSWORD')) {
+    errorMessage = 'This password is too weak.';
+  } else if (error.toString().contains('EMAIL_NOT_FOUND')) {
+    errorMessage = 'Could not found a user with that email.';
+  } else if (error.toString().contains('INVALID_PASSWORD')) {
+    errorMessage = 'Invalid password';
+  }
+
+  _showErrorDialog(errorMessage);
+} catch (error) {
+  const errorMessage =
+      'Could not authenticate yoy. Please try again later.';
+
+  _showErrorDialog(errorMessage);
+}
+```
+
 ```dart
 var _isInit = true;
 
 @override
 void initState() {
   // ! WON"T WORK BECAUSE context isn't available when this widget is rendered
-  Provider.of<Products>(context).fetchAndSetProducts(); 
-  
+  Provider.of<Products>(context).fetchAndSetProducts();
+
   // ! So below method can do though after executing all the widget and then this called
   // ! So it will delay to fetch the data from the server
   Future.delayed(Duration.zero).then((value) {
@@ -1343,9 +1383,10 @@ Future<void> deleteProduct(String id) async {
 ## `FutureBuilder` Widget:
 
 For more info,
-- [Medium Blog](https://medium.com/nonstopio/flutter-future-builder-with-list-view-builder-d7212314e8c9)
-- [GeeksForGeeks Blog](https://www.geeksforgeeks.org/flutter-futurebuilder-widget/)
-- [StackOverflow Discussion](https://stackoverflow.com/questions/51983011/when-should-i-use-a-futurebuilder)
+
+-   [Medium Blog](https://medium.com/nonstopio/flutter-future-builder-with-list-view-builder-d7212314e8c9)
+-   [GeeksForGeeks Blog](https://www.geeksforgeeks.org/flutter-futurebuilder-widget/)
+-   [StackOverflow Discussion](https://stackoverflow.com/questions/51983011/when-should-i-use-a-futurebuilder)
 
 ```dart
 @override
@@ -1385,4 +1426,844 @@ Widget build(BuildContext context) {
     ),
   );
 }
+```
+
+# Authentication:
+
+## `ProxyProvider` and Attaching the Token for other widgets/screens:
+
+`Sign in` and `SignUP` method is defined in the below `auth.dart` provider.
+
+```dart
+import 'dart:convert';
+import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/http_exception.dart';
+
+class Auth with ChangeNotifier {
+  String _token;
+  DateTime _expiryDate;
+  String _userId;
+  Timer _authTimer;
+
+  bool get isAuth {
+    return token != null;
+  }
+
+  String get token {
+    if (_expiryDate != null &&
+        _expiryDate.isAfter(DateTime.now()) &&
+        _token != null) {
+      return _token;
+    }
+    return null;
+  }
+
+  String get userId {
+    return _userId;
+  }
+
+  Future<void> _authenticate(
+    String email,
+    String password,
+    Uri url,
+  ) async {
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode(
+          {
+            'email': email,
+            'password': password,
+            'returnSecureToken': true,
+          },
+        ),
+      );
+      final responseData = json.decode(response.body);
+
+      if (responseData['error'] != null) {
+        throw HttpException(responseData['error']['message']);
+      }
+
+      _token = responseData['idToken'];
+      _userId = responseData['localId'];
+      _expiryDate = DateTime.now().add(
+        Duration(
+          seconds: int.parse(responseData['expiresIn']),
+        ),
+      );
+      _autoLogout();
+
+      notifyListeners();
+
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _token,
+        'userId': _userId,
+        'expiryDate': _expiryDate.toIso8601String(),
+      });
+      prefs.setString('userData', userData);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> signup(String email, String password) async {
+    final url = Uri.parse(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBfnKLaLtvHG0yWziioQwBQ_dBtt-gW5Mo');
+
+    return _authenticate(email, password, url);
+  }
+
+  Future<void> login(String email, String password) async {
+    final url = Uri.parse(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBfnKLaLtvHG0yWziioQwBQ_dBtt-gW5Mo');
+
+    return _authenticate(email, password, url);
+  }
+
+  Future<bool> tryAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (!prefs.containsKey('userData')) {
+      return false;
+    }
+
+    final extractedUserData =
+        json.decode(prefs.getString('userData')) as Map<String, Object>;
+    final expiryDate = DateTime.parse(extractedUserData['expiryDate']);
+
+    if (expiryDate.isBefore(DateTime.now())) {
+      return false;
+    }
+
+    _token = extractedUserData['token'];
+    _userId = extractedUserData['userId'];
+    _expiryDate = extractedUserData['expiryDate'];
+
+    notifyListeners();
+    _autoLogout();
+    return true;
+  }
+
+  Future<void> logout() async {
+    _token = null;
+    _userId = null;
+    _expiryDate = null;
+
+    if (_authTimer != null) {
+      _authTimer.cancel();
+      _authTimer = null;
+    }
+
+    notifyListeners();
+
+    final prefs = await SharedPreferences.getInstance();
+    // prefs.remove('userData');
+    prefs.clear();
+  }
+
+  void _autoLogout() {
+    if (_authTimer != null) {
+      _authTimer.cancel();
+    }
+
+    final timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
+
+    _authTimer = Timer(Duration(seconds: timeToExpiry), logout);
+  }
+}
+```
+
+The token is coming from the SignIn/SignUp  have to distribute to other widgets or screens. So to pass the token have to use `ProxyProvider`. It helps to connect the provider data containers among them. **`Upto 6 level ProxyProvider can use`**.
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import './providers/auth.dart';
+import './screens/orders_screen.dart';
+import './providers/orders.dart';
+import './screens/cart_screen.dart';
+import './providers/cart.dart';
+import './screens/products_overview_screen.dart';
+import './screens/product_detail_screen.dart';
+import './providers/products.dart';
+import './screens/users_products_screen.dart';
+import './screens/edit_product_screen.dart';
+import './screens/auth_screen.dart';
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Multiple Provider
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => Auth(),
+        ),
+        // Define the proxyProvider, in update key, it takes a function which takes
+        // 3 arguments, 1st context, 2nd the instance with which have to connect
+        // and 3rd, the previous state. So <Auth, Products> is defined to tell 1st 
+        // with which have to connect and 2nd with which have to use previous State.
+        // Then pass the token and prevState through constructor of the Provider class.
+        // For like, if required more ProxyProvider have to pass, then ChangeNotifierProxyProvider2, 
+        // ChangeNotifierProxyProvider3, .. upto ChangeNotifierProxyProvider6 are available. 
+        ChangeNotifierProxyProvider<Auth, Products>(
+          update: (context, auth, previousProducts) => Products(
+            auth.token,
+            previousProducts == null ? [] : previousProducts.items,
+          ),
+          create: null,
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Cart(),
+        ),
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          update: (context, auth, previousOrders) => Orders(
+            auth.token,
+            previousOrders == null ? [] : previousOrders.orders,
+          ),
+          create: null,
+        ),
+      ],
+      child: Consumer<Auth>(
+        builder: (context, auth, child) => MaterialApp(
+          // TODO: Have to remove this line later
+          debugShowCheckedModeBanner: false,
+          title: 'MyShop',
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato',
+          ),
+          home: auth.isAuth ? ProductsOverviewScreen() : AuthScreen(),
+          routes: {
+            ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
+            CartScreen.routeName: (context) => CartScreen(),
+            OrdersScreen.routeName: (context) => OrdersScreen(),
+            UserProductsScreen.routeName: (context) => UserProductsScreen(),
+            EditProductScreen.routeName: (context) => EditProductScreen(),
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+## Automatically Login Users:
+
+For that the package has used is [shared_preferences](https://pub.dev/packages/shared_preferences). So first configure the `auth.dart` provider.
+
+```dart
+import 'dart:convert';
+import 'dart:async';
+import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/http_exception.dart';
+
+class Auth with ChangeNotifier {
+  String _token;
+  DateTime _expiryDate;
+  String _userId;
+  Timer _authTimer;
+
+  bool get isAuth {
+    return token != null;
+  }
+
+  String get token {
+    if (_expiryDate != null &&
+        _expiryDate.isAfter(DateTime.now()) &&
+        _token != null) {
+      return _token;
+    }
+    return null;
+  }
+
+  String get userId {
+    return _userId;
+  }
+
+  Future<void> _authenticate(
+    String email,
+    String password,
+    Uri url,
+  ) async {
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode(
+          {
+            'email': email,
+            'password': password,
+            'returnSecureToken': true,
+          },
+        ),
+      );
+      final responseData = json.decode(response.body);
+
+      if (responseData['error'] != null) {
+        throw HttpException(responseData['error']['message']);
+      }
+
+      _token = responseData['idToken'];
+      _userId = responseData['localId'];
+      _expiryDate = DateTime.now().add(
+        Duration(
+          seconds: int.parse(responseData['expiresIn']),
+        ),
+      );
+      _autoLogout();
+
+      notifyListeners();
+
+      // Save information into the user device for auto login
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode({
+        'token': _token,
+        'userId': _userId,
+        'expiryDate': _expiryDate.toIso8601String(),
+      });
+      prefs.setString('userData', userData);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> signup(String email, String password) async {
+    final url = Uri.parse(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBfnKLaLtvHG0yWziioQwBQ_dBtt-gW5Mo');
+
+    return _authenticate(email, password, url);
+  }
+
+  Future<void> login(String email, String password) async {
+    final url = Uri.parse(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBfnKLaLtvHG0yWziioQwBQ_dBtt-gW5Mo');
+
+    return _authenticate(email, password, url);
+  }
+
+  // Define auto login method
+  Future<bool> tryAutoLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    if (!prefs.containsKey('userData')) {
+      return false;
+    }
+
+    final extractedUserData =
+        json.decode(prefs.getString('userData')) as Map<String, Object>;
+    final expiryDate = DateTime.parse(extractedUserData['expiryDate']);
+
+    if (expiryDate.isBefore(DateTime.now())) {
+      return false;
+    }
+
+    _token = extractedUserData['token'];
+    _userId = extractedUserData['userId'];
+    _expiryDate = extractedUserData['expiryDate'];
+
+    notifyListeners();
+    _autoLogout();
+    return true;
+  }
+
+  Future<void> logout() async {
+    _token = null;
+    _userId = null;
+    _expiryDate = null;
+
+    if (_authTimer != null) {
+      _authTimer.cancel();
+      _authTimer = null;
+    }
+
+    notifyListeners();
+
+    // When logout, clear the stored information from the user device
+    final prefs = await SharedPreferences.getInstance();
+    // prefs.remove('userData');
+    prefs.clear();
+  }
+
+  void _autoLogout() {
+    if (_authTimer != null) {
+      _authTimer.cancel();
+    }
+
+    final timeToExpiry = _expiryDate.difference(DateTime.now()).inSeconds;
+
+    _authTimer = Timer(Duration(seconds: timeToExpiry), logout);
+  }
+}
+```
+
+After defining into `auth.dart Provider`, change `main.dart` file something that this autologin is happend.
+
+```dart
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Multiple Provider
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => Auth(),
+        ),
+        ChangeNotifierProxyProvider<Auth, Products>(
+          update: (context, auth, previousProducts) => Products(
+            auth.token,
+            auth.userId,
+            previousProducts == null ? [] : previousProducts.items,
+          ),
+          create: null,
+        ),
+        ChangeNotifierProvider(
+          create: (context) => Cart(),
+        ),
+        ChangeNotifierProxyProvider<Auth, Orders>(
+          update: (context, auth, previousOrders) => Orders(
+            auth.token,
+            auth.userId,
+            previousOrders == null ? [] : previousOrders.orders,
+          ),
+          create: null,
+        ),
+      ],
+      child: Consumer<Auth>(
+        builder: (context, auth, child) => MaterialApp(
+          // TODO: Have to remove this line later
+          debugShowCheckedModeBanner: false,
+          title: 'MyShop',
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato',
+          ),
+          home: auth.isAuth
+              ? ProductsOverviewScreen()
+              // For auto login
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (context, authResultSnapshot) =>
+                      authResultSnapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? SplashScreen()
+                          : AuthScreen(),
+                ),
+          routes: {
+            ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
+            CartScreen.routeName: (context) => CartScreen(),
+            OrdersScreen.routeName: (context) => OrdersScreen(),
+            UserProductsScreen.routeName: (context) => UserProductsScreen(),
+            EditProductScreen.routeName: (context) => EditProductScreen(),
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+
+# Animations:
+
+## Manually Controlled Animations:
+
+```dart
+// Have to mixin with `SingleTickerProviderStateMixin` & always have to use Stateful Widget 
+class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin {
+  
+  // ! Configure Animation
+  AnimationController _controller;
+  Animation<Size> _heightAnimation;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+    _heightAnimation = Tween<Size>(
+      begin: Size(double.infinity, 260),
+      end: Size(double.infinity, 320),
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.linear,
+      ),
+    );
+    _heightAnimation.addListener(() => setState(() {}));
+    super.initState();
+  }
+
+  // ! Clean the listener
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _switchAuthMode() {
+    if (_authMode == AuthMode.Login) {
+      setState(() {
+        _authMode = AuthMode.Signup;
+      });
+      // ! Animation Call, when which have to show
+      _controller.forward();
+    } else {
+      setState(() {
+        _authMode = AuthMode.Login;
+      });
+      // ! Animation Call, when which have to show
+      _controller.reverse();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 8.0,
+      child: Container(
+        // height: _authMode == AuthMode.Signup ? 320 : 260,
+        //! Define the configured animation
+        height: _heightAnimation.value.height,
+        constraints: BoxConstraints(minHeight: _heightAnimation.value.height),
+        width: deviceSize.width * 0.75,
+        padding: EdgeInsets.all(16.0),
+        child: Form()
+      ),
+    )
+  }
+}
+```
+
+## `AnimatedBuilder` Widget:
+
+The above method has a flaw. For the animation, flutter re-render the whole widget component again and again that decreases the performance. For that AnimatedBuilder is used that only render what is required.
+
+```dart
+// Have to mixin with `SingleTickerProviderStateMixin` & always have to use Stateful Widget 
+class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin {
+  
+  // ! Configure Animation
+  AnimationController _controller;
+  Animation<Size> _heightAnimation;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+    _heightAnimation = Tween<Size>(
+      begin: Size(double.infinity, 260),
+      end: Size(double.infinity, 320),
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.linear,
+      ),
+    );
+    _heightAnimation.addListener(() => setState(() {}));
+    super.initState();
+  }
+
+  // ! Clean the listener
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _switchAuthMode() {
+    if (_authMode == AuthMode.Login) {
+      setState(() {
+        _authMode = AuthMode.Signup;
+      });
+      // ! Animation Call, when which have to show
+      _controller.forward();
+    } else {
+      setState(() {
+        _authMode = AuthMode.Login;
+      });
+      // ! Animation Call, when which have to show
+      _controller.reverse();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 8.0,
+      child:  AnimatedBuilder(
+        animation: _heightAnimation,
+        builder: (context, child) => Container(
+          // height: _authMode == AuthMode.Signup ? 320 : 260,
+          height: _heightAnimation.value.height,
+          constraints: BoxConstraints(minHeight: _heightAnimation.value.height),
+          child: child,
+        ),
+        child: Form(),
+      ),
+    )
+  }
+}
+```
+
+## `AnimatedContainer` Widget:
+
+More reduce the above code. Don't require the configuration of the animation and also don't require the `AnimatedBuilder` widget.
+
+```dart
+// Have to mixin with `SingleTickerProviderStateMixin` & always have to use Stateful Widget 
+class _AuthCardState extends State<AuthCard> with SingleTickerProviderStateMixin {
+
+  void _switchAuthMode() {
+    if (_authMode == AuthMode.Login) {
+      setState(() {
+        _authMode = AuthMode.Signup;
+      });
+      // ! Animation Call, when which have to show
+      _controller.forward();
+    } else {
+      setState(() {
+        _authMode = AuthMode.Login;
+      });
+      // ! Animation Call, when which have to show
+      _controller.reverse();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final deviceSize = MediaQuery.of(context).size;
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      elevation: 8.0,
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+        height: _authMode == AuthMode.Signup ? 320 : 260,
+        constraints: BoxConstraints(minHeight: _authMode == AuthMode.Signup ? 320 : 260),
+        child: Form(),
+      ),
+    )
+  }
+}
+```
+
+## `FadeTransition` Widget:
+
+For details click [here](https://api.flutter.dev/flutter/widgets/FadeTransition-class.html)
+
+## `SlideTransition` Widget:
+
+for details click [here](https://api.flutter.dev/flutter/widgets/SlideTransition-class.html)
+
+## `FadeInImage` Widget:
+
+When using the network image, it takes time to load. That time as a placeholder show an image through this widget.
+
+```dart
+FadeInImage(
+  placeholder: AssetImage('assets/images/product-placeholder.png'),
+  image: NetworkImage(product.imageUrl),
+  fit: BoxFit.cover,
+)
+```
+
+## **`Hero`** Animation:
+When user goes from screen to other screen, the image of the previous screen like goes to the other screen automatically and change the size according to the requirement. Like whatsapp.</br>
+So first have to define in the previous image.
+
+```dart
+Hero(
+  tag: product.id,
+  child: FadeInImage(
+    placeholder: AssetImage('assets/images/product-placeholder.png'),
+    image: NetworkImage(product.imageUrl),
+    fit: BoxFit.cover,
+  ),
+)
+```
+Next have to define the next screen. The `tag` will be same, otherwise not work.
+
+```dart
+Hero(
+  tag: loadedProduct.id,
+  child: Image.network(
+    loadedProduct.imageUrl,
+    fit: BoxFit.cover,
+  ),
+)
+```
+
+## Slivers Animation `CustomScrollView Widget`:
+
+<img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/14.png" height = "550" alt = "Flutter"/>
+<img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/15.png" height = "550" alt = "Flutter"/>
+<img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/16.png" height = "550" alt = "Flutter"/>
+
+```dart
+Scaffold(
+  body: CustomScrollView(
+    slivers: <Widget>[
+      SliverAppBar(
+        expandedHeight: 300,
+        pinned: true,
+        flexibleSpace: FlexibleSpaceBar(
+          title: Text(loadedProduct.title),
+          background: Hero(
+            tag: loadedProduct.id,
+            child: Image.network(
+              loadedProduct.imageUrl,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
+      SliverList(
+        delegate: SliverChildListDelegate(
+          [
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              '\$${loadedProduct.price}',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 20,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: 10,
+              ),
+              width: double.infinity,
+              child: Text(
+                loadedProduct.description,
+                textAlign: TextAlign.center,
+                softWrap: true,
+              ),
+            ),
+            SizedBox(
+              height: 800,
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+);
+```
+
+## Route Transitions Animation (FadeTransition):
+
+For this have to create a helper class
+
+```dart
+import 'package:flutter/material.dart';
+
+// This class is for if you want one route with this transition
+class CustomRoute<T> extends MaterialPageRoute<T> {
+  CustomRoute({
+    WidgetBuilder builder,
+    RouteSettings settings,
+  }) : super(
+          builder: builder,
+          settings: settings,
+        );
+
+  @override
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    if (settings.name == '/') {
+      return child;
+    }
+
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  }
+}
+
+// This class is for if you want the transition to all the routes
+class CustomPageTransitionBuilder extends PageTransitionsBuilder {
+  @override
+  Widget buildTransitions<T>(
+    PageRoute<T> route,
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    if (route.settings.name == '/') {
+      return child;
+    }
+
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  }
+}
+```
+
+If you wanted to only one route then use the `CustomRoute` Class defined above code.
+
+```dart
+Navigator.of(context)
+  .pushReplacement(
+    CustomRoute(
+      builder: (context) => OrdersScreen(),
+    ),
+);
+```
+
+If you want that this transaction is applied to all the routes, then use the `CustomPageTransitionBuilder` class defined above in `theme`.
+
+```dart
+theme: ThemeData(
+  primarySwatch: Colors.purple,
+  accentColor: Colors.deepOrange,
+  fontFamily: 'Lato',
+  pageTransitionsTheme: PageTransitionsTheme(
+    builders: {
+      TargetPlatform.android: CustomPageTransitionBuilder(),
+      TargetPlatform.iOS: CustomPageTransitionBuilder(),
+    },
+  ),
+)
 ```
