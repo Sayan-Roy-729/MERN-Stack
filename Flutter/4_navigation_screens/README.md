@@ -9,7 +9,19 @@
 | 4 | Named Routes | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#named-routes) |
 | 5 | static const routeName | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#deep-drive-into-named-routes) |
 | 6 | onGenerateRoute  | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#ongenerateroute--onunknownroute) |
-| 7 | onUnknownRoute | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#ongenerateroute--onunknownroute)
+| 7 | onUnknownRoute | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#ongenerateroute--onunknownroute) |
+| 8 | TabBar | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#tabbar-in-appbar) |
+| 9 | Bottom TabBar | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#bottom-tabbar) |
+| 10 | Drawer | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#add-drawer) |
+| 11 | pushReplacementNamed() Method | [click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#pushreplacementnamed) |
+| 12 | pop() Method | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#navigatorofcontextpop) |
+| 13 | CLipRRect Widget | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#cliprrect-widget) |
+| 14 | Network Image | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#network-images) |
+| 15 | Card Widget | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#card-widget) |
+| 16 | Stack Widget | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#stack-widget) |
+| 17 | Positioned Widget | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#positioned-widget) |
+| 18 | Dicider Widget | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#divider-widget) |
+| 19 | SwitchListTile | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#switchlisttile-widget) |
 
 ## `Navigator.of(context).push()`:
 
