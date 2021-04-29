@@ -218,17 +218,10 @@ class MyApp ...... {
     final amountController = TextEditingController();
 
     void submitData() {
+        // access the input values
         final enteredTitle = titleController.text;
         final enteredAmount = double.parse(amountController.text);
-
-        if (enteredTitle.isEmpty || enteredAmount <= 0) {
-            return;
-        }
-
-        addTx(
-            enteredTitle,
-            enteredAmount,
-        );
+        // ... Code for requirement
     }
 
     ...... <build context>
