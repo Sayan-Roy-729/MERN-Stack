@@ -184,6 +184,7 @@ Column(
                 labelText: 'Title',
             ),
             onChanged: (value) {
+                // titleInput is class property to store the value
                 titleInput = value;
             },
         ),
@@ -191,12 +192,14 @@ Column(
             decoration: InputDecoration(
                 labelText: 'Amount',
             ),
+            // amountInput is class property to store the value
             onChanged: (value) => amountInput = value,
         ),
         FlatButton(
             child: Text('Add Transcation'),
             textColor: Colors.purple,
             onPressed: () {
+                // access the input values that stored into the class property
                 print(titleInput);
                 print(amountInput);
             },
@@ -210,7 +213,7 @@ Another way to register the input fields by using `TextEditingController`.
 ```dart
 class MyApp ...... {
 
-    // Ass class properties
+    // As class properties
     final titleController = TextEditingController();
     final amountController = TextEditingController();
 
