@@ -230,13 +230,6 @@ class MyApp ...... {
         children: [
                 TextField(
                     decoration: InputDecoration(
-                        labelText: 'Title',
-                    ),
-                    controller: titleController,
-                    onSubmitted: (value) => submitData()
-                ),
-                TextField(
-                    decoration: InputDecoration(
                         labelText: 'Amount',
                     ),
                     controller: amountController,
