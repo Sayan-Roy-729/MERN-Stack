@@ -115,23 +115,10 @@ Text(
         fontSize: 20,
         color: Colors.purple,
     ),
+    softWrap: true,
+    overflow: TextOverflow.fade,
 )
 ```
-
-Another example:
-
-```dart
-Text(
-  'Text Widget with softWrap & Overflow',
-  style: TextStyle(
-    fontSize: 26,
-    color: Colors.white,
-  ),
-  softWrap: true,
-  overflow: TextOverflow.fade,
-)
-```
-
 ## Format Date with [intl](https://pub.dev/packages/intl) package:
 
 `flutter packages get`
