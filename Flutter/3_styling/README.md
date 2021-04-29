@@ -384,7 +384,6 @@ import 'package:flutter/material.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addTx;
-
   NewTransaction(this.addTx);
 
   @override
@@ -397,55 +396,13 @@ class _NewTransactionState extends State<NewTransaction> {
   final amountController = TextEditingController();
 
   void submitData() {
-    final enteredTitle = titleController.text;
-    final enteredAmount = double.parse(amountController.text);
-
-    if (enteredTitle.isEmpty || enteredAmount <= 0) {
-      return;
-    }
-
     // receive from the State class
-    widget.addTx(
-      enteredTitle,
-      enteredAmount,
-    );
-
-    Navigator.of(context).pop();
+    widget.addTx();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Title',
-              ),
-              controller: titleController,
-              onSubmitted: (value) => submitData(),
-            ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Amount',
-              ),
-              keyboardType: TextInputType.number,
-              controller: amountController,
-              onSubmitted: (value) => submitData(),
-            ),
-            FlatButton(
-              child: Text('Add Transcation'),
-              textColor: Colors.purple,
-              onPressed: submitData,
-            ),
-          ],
-        ),
-      ),
-    );
+    return Card();
   }
 }
 ```
