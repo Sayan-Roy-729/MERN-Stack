@@ -1,4 +1,4 @@
-# styling
+# Flutter Widgets & Responsiveness
 
 ## Index:
 
@@ -130,11 +130,6 @@ import 'package:intl/intl.dart';
 DateFormat().format(tx.date);
 ```
 
-**2021-03-25**
-**2021/03/25**
-**Mar 25, 2021**
-**Letter for week days like Sun for Sunday**
-
 ```dart
 import 'package/intl/intl.dart';
 
@@ -144,10 +139,10 @@ final weekDay = DateTime.now().subtract(
   ),
 );
 
-DateFormat('yyyy-MM-dd').format(tx.date);
-DateFormat('yyyy/MM/dd').format(tx.date);
-DateFormat.yMMMd().format(tx.date);
-DateFormat.E().format(weekDay);
+DateFormat('yyyy-MM-dd').format(tx.date); // 2021-03-25
+DateFormat('yyyy/MM/dd').format(tx.date); // 2021/03/25
+DateFormat.yMMMd().format(tx.date); // Mar 25, 2021
+DateFormat.E().format(weekDay); // Letter for week days like Sun for Sunday
 ```
 
 ## `FlatButton` Widget:
