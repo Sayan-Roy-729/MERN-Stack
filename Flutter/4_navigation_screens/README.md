@@ -1,18 +1,22 @@
 # navigation_screens
 
+## Index:
+| Sl. No. | Topic | Link |
+| :---: | :---: | :---: |
+| 1 | push() method | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#navigatorofcontextpush) |
+| 2 | pushNamed() method | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#navigatorofcontextpush) |
+| 3 | pushReplacement() method | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#navigatorofcontextpush) |
+
 ## `Navigator.of(context).push()`:
 
 Stack the page on top each other pages.
 
 ```dart
 class CategoryItem extends StatelessWidget {
-  final String id;
-  final String title;
-  final Color color;
-
-  CategoryItem(this.id, this.title, this.color);
 
   void selectCategory(BuildContext context) {
+    // Navigator.of(context).pushNamed(routeName);
+    // Navigator.of(context).pushReplacement(newRoute);
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
@@ -20,33 +24,12 @@ class CategoryItem extends StatelessWidget {
         },
       ),
     );
-    // Navigator.of(context).pushNamed(routeName);
-    // Navigator.of(context).pushReplacement(newRoute);
   }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => selectCategory(context),
-      splashColor: Theme.of(context).primaryColor,
-      borderRadius: BorderRadius.circular(15),
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              color.withOpacity(0.7),
-              color,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(15),
-        ),
       ),
     );
   }
