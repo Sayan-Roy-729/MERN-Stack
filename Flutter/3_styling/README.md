@@ -597,22 +597,7 @@ Alternative of `Container` widget if you want to give only padding to the `Conta
 ```dart
 Padding(
   padding: EdgeInsets.all(10),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: groupedTransactionValues.map((data) {
-      return Flexible(
-        fit: FlexFit.tight,
-        // ChartBar is a custom widget
-        child: ChartBar(
-          data['day'],
-          data['amount'],
-          totalSpending == 0.0
-              ? 0.0
-              : (data['amount'] as double) / totalSpending,
-        ),
-      );
-    }).toList(),
-  ),
+  child: Row(),
 )
 ```
 
@@ -628,21 +613,19 @@ Card(
     horizontal: 5,
   ),
   child: ListTile(
+    // Left most of part (mostly where the small circular image is shown)
     leading: CircleAvatar(
       radius: 30,
-      child: Padding(
-        padding: EdgeInsets.all(6),
-        child: FittedBox(
-          child: Text(
-            '\$${transactions[index].amount}',
-          ),
+      child: Padding(),
         ),
       ),
     ),
+    // Main Title
     title: Text(
       'Main Title',
       style: Theme.of(context).textTheme.headline6,
     ),
+    // Sub title, will be below of the title
     subtitle: Text(
       'SubTitle',
     ),
@@ -665,6 +648,7 @@ Card(
 void _presentDatePicker() {
   showDatePicker(
     context: context,
+    // Initialize the date picker
     initialDate: DateTime.now(),
     firstDate: DateTime(2019),
     lastDate: DateTime.now(),
@@ -684,20 +668,10 @@ Container(
   height: 70,
   child: Row(
     children: <Widget>[
-      Expanded(
-        child: Text(
-          _selectedDate == null
-              ? 'No Date Chosen!'
-              : 'Picked Date: ${DateFormat.yMd().format(_selectedDate)}',
-        ),
-      ),
+      Expanded(),
       FlatButton(
         textColor: Theme.of(context).primaryColor,
-        child: Text(
-          'Choose Date',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+        child: Text(),
         ),
         onPressed: _presentDatePicker,
       ),
@@ -807,11 +781,7 @@ InkWell(
   splashColor: Theme.of(context).primaryColor,
   borderRadius: BorderRadius.circular(15),
   child: Container(
-    padding: const EdgeInsets.all(15),
-    child: Text(
-      title,
-      style: Theme.of(context).textTheme.headline6,
-    ),
+    child: Text(),
     decoration: BoxDecoration(
       gradient: LinearGradient(
         colors: [
