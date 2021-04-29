@@ -58,8 +58,6 @@ class MyApp extends StatelessWidget {
   }
 }
 ```
-
-Result of the above code -->
 <img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/2.jpg" height = "500">
 
 ### Stateless & Stateful Widgets:
