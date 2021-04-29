@@ -1,4 +1,4 @@
-# basic_flutter_1
+# Flutter Basics
 
 -   Create a new flutter project `flutter create <projectName>`
 -   Can run the flutter project `flutter run` or in vs code run with `run without debugging`
@@ -33,8 +33,6 @@ class MyApp extends StatelessWidget {
   }
 }
 ```
-
-Result of the above code -->
 <img src = "https://github.com/Sayan-Roy-729/MERN-Stack/blob/main/assets/flutter/1.jpg" height = "500">
 
 ### Improve litter by removing black background
