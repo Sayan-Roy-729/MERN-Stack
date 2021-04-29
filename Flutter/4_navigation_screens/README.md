@@ -6,6 +6,10 @@
 | 1 | push() method | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#navigatorofcontextpush) |
 | 2 | pushNamed() method | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#navigatorofcontextpush) |
 | 3 | pushReplacement() method | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#navigatorofcontextpush) |
+| 4 | Named Routes | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#named-routes) |
+| 5 | static const routeName | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#deep-drive-into-named-routes) |
+| 6 | onGenerateRoute  | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#ongenerateroute--onunknownroute) |
+| 7 | onUnknownRoute | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#ongenerateroute--onunknownroute)
 
 ## `Navigator.of(context).push()`:
 
@@ -166,7 +170,7 @@ routes: {
   CategoryMealsScreen.routeName: (context) => CategoryMealsScreen(),
   // MealDetailScreen.routeName: (context) => MealDetailScreen(),
 },
-// When not registered the route here, then ihe route will go to this
+// When not registered the route name into the routes, then this route will go to this
 // onGenerateRoute and then load the CategoriesScreen Widget as screen
 onGenerateRoute: (settings) {
   print(settings.arguments);
@@ -181,7 +185,7 @@ onGenerateRoute: (settings) {
 },
 
 // onUnknownRoute is reached when flutter failed to build the screen with all other measures.
-// When defined nothing as a route and don't use onGenerateRoute, then as the last, it will executed.
+// When defined nothing as a route and don't use onGenerateRoute, then as the last, it will be executed.
 // It is like 404 page like web
 onUnknownRoute: (settings) {
   return MaterialPageRoute(
