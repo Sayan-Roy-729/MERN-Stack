@@ -65,20 +65,20 @@
 
 ```dart
 Column(
-mainAxisAlignment: MainAxisAlignment.spaceAround,
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
         Container(
-        width: double.infinity,
-        child: Card(
-            color: Colors.blue,
-            child: Text('CHART!'),
-            elevation: 5,
-        ),
+            width: double.infinity,
+            child: Card(
+                color: Colors.blue,
+                child: Text('CHART!'),
+                elevation: 5,
+            ),
         ),
         Card(
-        color: Colors.red,
-        child: Text('LIST OF TX'),
+            color: Colors.red,
+            child: Text('LIST OF TX'),
         ),
     ],
 )
