@@ -352,39 +352,7 @@ Widget build(BuildContext context) {
 ## Bottom Sheet `Modal`:
 
 ```dart
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransactions = [
-    Transaction(
-      id: 't1',
-      title: 'New Shoes',
-      amount: 69.99,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Weekly Groceries',
-      amount: 16.53,
-      date: DateTime.now(),
-    ),
-  ];
-
-  void _addNewTransaction(String txTitle, double txAmount) {
-    final newTx = Transaction(
-      id: DateTime.now().toString(),
-      title: txTitle,
-      amount: txAmount,
-      date: DateTime.now(),
-    );
-
-    setState(() {
-      _userTransactions.add(newTx);
-    });
-  }
 
   // Showing a Modal Bottom Sheet
   void _startAddNewTransaction(BuildContext context) {
@@ -393,7 +361,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context) {
         return GestureDetector(
           onTap: () {},
-          child: NewTransaction(_addNewTransaction),
+          child: ...,
           behavior: HitTestBehavior.opaque,
         );
       },
@@ -403,32 +371,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter App'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _startAddNewTransaction(context),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                child: Text('CHART!'),
-                elevation: 5,
-              ),
-            ),
-            TransactionList(_userTransactions),
-          ],
-        ),
-      ),
+      body: Text('Bottom Modal Sheet'),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
