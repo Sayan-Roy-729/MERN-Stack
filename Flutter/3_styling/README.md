@@ -261,21 +261,7 @@ Scaffold(
         title: Text('Flutter App'),
     ),
     body: SingleChildScrollView(
-        child: Column(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-                Container(
-                    width: double.infinity,
-                    child: Card(
-                    color: Colors.blue,
-                    child: Text('CHART!'),
-                    elevation: 5,
-                    ),
-                ),
-                UserTransactions(),
-            ],
-        ),
+        child: Text('SingleChildScrollView'),
     ),
 )
 ```
@@ -350,26 +336,14 @@ Widget build(BuildContext context) {
             ],
         ),
         body: SingleChildScrollView(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                    Container(
-                        width: double.infinity,
-                        child: Card(
-                            color: Colors.blue,
-                            child: Text('CHART!'),
-                            elevation: 5,
-                        ),
-                    ),
-                    UserTransactions(),
-                ],
-            ),
+            child: Column(),
         ),
-        // Define FloatingActionButton
+        // Define FloatingActionButton Location of the Screen
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        // Define the button
         floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {},
+            child: Icon(Icons.add),
+            onPressed: () {},
         ),
     );
 }
