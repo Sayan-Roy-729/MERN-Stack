@@ -1,4 +1,4 @@
-# styling
+# Flutter Widgets & Responsiveness
 
 ## Index:
 
@@ -65,20 +65,20 @@
 
 ```dart
 Column(
-mainAxisAlignment: MainAxisAlignment.spaceAround,
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: <Widget>[
         Container(
-        width: double.infinity,
-        child: Card(
-            color: Colors.blue,
-            child: Text('CHART!'),
-            elevation: 5,
-        ),
+            width: double.infinity,
+            child: Card(
+                color: Colors.blue,
+                child: Text('CHART!'),
+                elevation: 5,
+            ),
         ),
         Card(
-        color: Colors.red,
-        child: Text('LIST OF TX'),
+            color: Colors.red,
+            child: Text('LIST OF TX'),
         ),
     ],
 )
@@ -115,23 +115,10 @@ Text(
         fontSize: 20,
         color: Colors.purple,
     ),
+    softWrap: true,
+    overflow: TextOverflow.fade,
 )
 ```
-
-Another example:
-
-```dart
-Text(
-  'Text Widget with softWrap & Overflow',
-  style: TextStyle(
-    fontSize: 26,
-    color: Colors.white,
-  ),
-  softWrap: true,
-  overflow: TextOverflow.fade,
-)
-```
-
 ## Format Date with [intl](https://pub.dev/packages/intl) package:
 
 `flutter packages get`
@@ -143,11 +130,6 @@ import 'package:intl/intl.dart';
 DateFormat().format(tx.date);
 ```
 
-**2021-03-25**
-**2021/03/25**
-**Mar 25, 2021**
-**Letter for week days like Sun for Sunday**
-
 ```dart
 import 'package/intl/intl.dart';
 
@@ -157,10 +139,10 @@ final weekDay = DateTime.now().subtract(
   ),
 );
 
-DateFormat('yyyy-MM-dd').format(tx.date);
-DateFormat('yyyy/MM/dd').format(tx.date);
-DateFormat.yMMMd().format(tx.date);
-DateFormat.E().format(weekDay);
+DateFormat('yyyy-MM-dd').format(tx.date); // 2021-03-25
+DateFormat('yyyy/MM/dd').format(tx.date); // 2021/03/25
+DateFormat.yMMMd().format(tx.date); // Mar 25, 2021
+DateFormat.E().format(weekDay); // Letter for week days like Sun for Sunday
 ```
 
 ## `FlatButton` Widget:
@@ -202,6 +184,7 @@ Column(
                 labelText: 'Title',
             ),
             onChanged: (value) {
+                // titleInput is class property to store the value
                 titleInput = value;
             },
         ),
@@ -209,12 +192,14 @@ Column(
             decoration: InputDecoration(
                 labelText: 'Amount',
             ),
+            // amountInput is class property to store the value
             onChanged: (value) => amountInput = value,
         ),
         FlatButton(
             child: Text('Add Transcation'),
             textColor: Colors.purple,
             onPressed: () {
+                // access the input values that stored into the class property
                 print(titleInput);
                 print(amountInput);
             },
@@ -228,35 +213,21 @@ Another way to register the input fields by using `TextEditingController`.
 ```dart
 class MyApp ...... {
 
-    // Ass class properties
+    // As class properties
     final titleController = TextEditingController();
     final amountController = TextEditingController();
 
     void submitData() {
+        // access the input values
         final enteredTitle = titleController.text;
         final enteredAmount = double.parse(amountController.text);
-
-        if (enteredTitle.isEmpty || enteredAmount <= 0) {
-            return;
-        }
-
-        addTx(
-            enteredTitle,
-            enteredAmount,
-        );
+        // ... Code for requirement
     }
 
     ...... <build context>
     Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-                TextField(
-                    decoration: InputDecoration(
-                        labelText: 'Title',
-                    ),
-                    controller: titleController,
-                    onSubmitted: (value) => submitData()
-                ),
                 TextField(
                     decoration: InputDecoration(
                         labelText: 'Amount',
@@ -283,21 +254,7 @@ Scaffold(
         title: Text('Flutter App'),
     ),
     body: SingleChildScrollView(
-        child: Column(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-                Container(
-                    width: double.infinity,
-                    child: Card(
-                    color: Colors.blue,
-                    child: Text('CHART!'),
-                    elevation: 5,
-                    ),
-                ),
-                UserTransactions(),
-            ],
-        ),
+        child: Text('SingleChildScrollView'),
     ),
 )
 ```
@@ -311,51 +268,7 @@ Container(
     child: SingleChildScrollView(
     child: Column(
         children: transactions.map((tx) {
-        return Card(
-            child: Row(
-            children: <Widget>[
-                Container(
-                margin: EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 15,
-                ),
-                decoration: BoxDecoration(
-                    border: Border.all(
-                    color: Colors.purple,
-                    width: 2,
-                    ),
-                ),
-                padding: EdgeInsets.all(10),
-                child: Text(
-                    '\$${tx.amount}',
-                    style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.purple,
-                    ),
-                ),
-                ),
-                Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                    Text(
-                    tx.title,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                    ),
-                    ),
-                    Text(
-                    DateFormat.yMMMd().format(tx.date),
-                    style: TextStyle(
-                        color: Colors.grey,
-                    ),
-                    ),
-                ],
-                ),
-            ],
-            ),
-        );
+            return Card();
         }).toList(),
     ),
     ),
@@ -370,48 +283,7 @@ Container(
     child: ListView(
         children: transactions.map((tx) {
             return Card(
-                child: Row(
-                    children: <Widget>[
-                        Container(
-                            margin: EdgeInsets.symmetric(
-                                vertical: 10,
-                                horizontal: 15,
-                            ),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.purple,
-                                    width: 2,
-                                ),
-                            ),
-                            padding: EdgeInsets.all(10),
-                                child: Text(
-                                '\$${tx.amount}',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                    color: Colors.purple,
-                                ),
-                            ),
-                        ),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                                Text(
-                                    tx.title,
-                                    style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    ),
-                                ),
-                                Text(
-                                    DateFormat.yMMMd().format(tx.date),
-                                    style: TextStyle(
-                                    color: Colors.grey,
-                                    ),
-                                ),
-                            ],
-                        ),
-                    ],
+                child: Text(tx),
                 ),
             );
         }).toList(),
@@ -433,49 +305,7 @@ Container(
         itemCount: transactions.length,
         itemBuilder: (context, index) {
             return Card(
-            child: Row(
-                children: <Widget>[
-                Container(
-                    margin: EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 15,
-                    ),
-                    decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.purple,
-                        width: 2,
-                    ),
-                    ),
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                    '\$${transactions[index].amount}',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Colors.purple,
-                    ),
-                    ),
-                ),
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                    Text(
-                        transactions[index].title,
-                        style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        ),
-                    ),
-                    Text(
-                        DateFormat.yMMMd().format(transactions[index].date),
-                        style: TextStyle(
-                        color: Colors.grey,
-                        ),
-                    ),
-                    ],
-                ),
-                ],
-            ),
+                child: Text(transactions[index]),
             );
         },
     ),
@@ -499,26 +329,14 @@ Widget build(BuildContext context) {
             ],
         ),
         body: SingleChildScrollView(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                    Container(
-                        width: double.infinity,
-                        child: Card(
-                            color: Colors.blue,
-                            child: Text('CHART!'),
-                            elevation: 5,
-                        ),
-                    ),
-                    UserTransactions(),
-                ],
-            ),
+            child: Column(),
         ),
-        // Define FloatingActionButton
+        // Define FloatingActionButton Location of the Screen
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        // Define the button
         floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {},
+            child: Icon(Icons.add),
+            onPressed: () {},
         ),
     );
 }
@@ -527,39 +345,7 @@ Widget build(BuildContext context) {
 ## Bottom Sheet `Modal`:
 
 ```dart
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransactions = [
-    Transaction(
-      id: 't1',
-      title: 'New Shoes',
-      amount: 69.99,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: 't2',
-      title: 'Weekly Groceries',
-      amount: 16.53,
-      date: DateTime.now(),
-    ),
-  ];
-
-  void _addNewTransaction(String txTitle, double txAmount) {
-    final newTx = Transaction(
-      id: DateTime.now().toString(),
-      title: txTitle,
-      amount: txAmount,
-      date: DateTime.now(),
-    );
-
-    setState(() {
-      _userTransactions.add(newTx);
-    });
-  }
 
   // Showing a Modal Bottom Sheet
   void _startAddNewTransaction(BuildContext context) {
@@ -568,7 +354,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context) {
         return GestureDetector(
           onTap: () {},
-          child: NewTransaction(_addNewTransaction),
+          child: ...,
           behavior: HitTestBehavior.opaque,
         );
       },
@@ -578,32 +364,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter App'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _startAddNewTransaction(context),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blue,
-                child: Text('CHART!'),
-                elevation: 5,
-              ),
-            ),
-            TransactionList(_userTransactions),
-          ],
-        ),
-      ),
+      body: Text('Bottom Modal Sheet'),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -623,7 +384,6 @@ import 'package:flutter/material.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addTx;
-
   NewTransaction(this.addTx);
 
   @override
@@ -636,55 +396,13 @@ class _NewTransactionState extends State<NewTransaction> {
   final amountController = TextEditingController();
 
   void submitData() {
-    final enteredTitle = titleController.text;
-    final enteredAmount = double.parse(amountController.text);
-
-    if (enteredTitle.isEmpty || enteredAmount <= 0) {
-      return;
-    }
-
     // receive from the State class
-    widget.addTx(
-      enteredTitle,
-      enteredAmount,
-    );
-
-    Navigator.of(context).pop();
+    widget.addTx();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Title',
-              ),
-              controller: titleController,
-              onSubmitted: (value) => submitData(),
-            ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Amount',
-              ),
-              keyboardType: TextInputType.number,
-              controller: amountController,
-              onSubmitted: (value) => submitData(),
-            ),
-            FlatButton(
-              child: Text('Add Transcation'),
-              textColor: Colors.purple,
-              onPressed: submitData,
-            ),
-          ],
-        ),
-      ),
-    );
+    return Card();
   }
 }
 ```
@@ -879,22 +597,7 @@ Alternative of `Container` widget if you want to give only padding to the `Conta
 ```dart
 Padding(
   padding: EdgeInsets.all(10),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: groupedTransactionValues.map((data) {
-      return Flexible(
-        fit: FlexFit.tight,
-        // ChartBar is a custom widget
-        child: ChartBar(
-          data['day'],
-          data['amount'],
-          totalSpending == 0.0
-              ? 0.0
-              : (data['amount'] as double) / totalSpending,
-        ),
-      );
-    }).toList(),
-  ),
+  child: Row(),
 )
 ```
 
@@ -910,21 +613,19 @@ Card(
     horizontal: 5,
   ),
   child: ListTile(
+    // Left most of part (mostly where the small circular image is shown)
     leading: CircleAvatar(
       radius: 30,
-      child: Padding(
-        padding: EdgeInsets.all(6),
-        child: FittedBox(
-          child: Text(
-            '\$${transactions[index].amount}',
-          ),
+      child: Padding(),
         ),
       ),
     ),
+    // Main Title
     title: Text(
       'Main Title',
       style: Theme.of(context).textTheme.headline6,
     ),
+    // Sub title, will be below of the title
     subtitle: Text(
       'SubTitle',
     ),
@@ -947,6 +648,7 @@ Card(
 void _presentDatePicker() {
   showDatePicker(
     context: context,
+    // Initialize the date picker
     initialDate: DateTime.now(),
     firstDate: DateTime(2019),
     lastDate: DateTime.now(),
@@ -966,20 +668,10 @@ Container(
   height: 70,
   child: Row(
     children: <Widget>[
-      Expanded(
-        child: Text(
-          _selectedDate == null
-              ? 'No Date Chosen!'
-              : 'Picked Date: ${DateFormat.yMd().format(_selectedDate)}',
-        ),
-      ),
+      Expanded(),
       FlatButton(
         textColor: Theme.of(context).primaryColor,
-        child: Text(
-          'Choose Date',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+        child: Text(),
         ),
         onPressed: _presentDatePicker,
       ),
@@ -1089,11 +781,7 @@ InkWell(
   splashColor: Theme.of(context).primaryColor,
   borderRadius: BorderRadius.circular(15),
   child: Container(
-    padding: const EdgeInsets.all(15),
-    child: Text(
-      title,
-      style: Theme.of(context).textTheme.headline6,
-    ),
+    child: Text(),
     decoration: BoxDecoration(
       gradient: LinearGradient(
         colors: [

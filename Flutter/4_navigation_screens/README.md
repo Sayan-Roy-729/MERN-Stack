@@ -1,18 +1,38 @@
 # navigation_screens
 
+## Index:
+| Sl. No. | Topic | Link |
+| :---: | :---: | :---: |
+| 1 | push() method | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#navigatorofcontextpush) |
+| 2 | pushNamed() method | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#navigatorofcontextpush) |
+| 3 | pushReplacement() method | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#navigatorofcontextpush) |
+| 4 | Named Routes | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#named-routes) |
+| 5 | static const routeName | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#deep-drive-into-named-routes) |
+| 6 | onGenerateRoute  | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#ongenerateroute--onunknownroute) |
+| 7 | onUnknownRoute | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#ongenerateroute--onunknownroute) |
+| 8 | TabBar | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#tabbar-in-appbar) |
+| 9 | Bottom TabBar | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#bottom-tabbar) |
+| 10 | Drawer | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#add-drawer) |
+| 11 | pushReplacementNamed() Method | [click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#pushreplacementnamed) |
+| 12 | pop() Method | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#navigatorofcontextpop) |
+| 13 | CLipRRect Widget | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#cliprrect-widget) |
+| 14 | Network Image | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#network-images) |
+| 15 | Card Widget | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#card-widget) |
+| 16 | Stack Widget | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#stack-widget) |
+| 17 | Positioned Widget | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#positioned-widget) |
+| 18 | Dicider Widget | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#divider-widget) |
+| 19 | SwitchListTile | [Click](https://github.com/Sayan-Roy-729/MERN-Stack/tree/main/Flutter/4_navigation_screens#switchlisttile-widget) |
+
 ## `Navigator.of(context).push()`:
 
 Stack the page on top each other pages.
 
 ```dart
 class CategoryItem extends StatelessWidget {
-  final String id;
-  final String title;
-  final Color color;
-
-  CategoryItem(this.id, this.title, this.color);
 
   void selectCategory(BuildContext context) {
+    // Navigator.of(context).pushNamed(routeName);
+    // Navigator.of(context).pushReplacement(newRoute);
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
@@ -20,33 +40,12 @@ class CategoryItem extends StatelessWidget {
         },
       ),
     );
-    // Navigator.of(context).pushNamed(routeName);
-    // Navigator.of(context).pushReplacement(newRoute);
   }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => selectCategory(context),
-      splashColor: Theme.of(context).primaryColor,
-      borderRadius: BorderRadius.circular(15),
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              color.withOpacity(0.7),
-              color,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(15),
-        ),
       ),
     );
   }
@@ -67,26 +66,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'DeliMeals',
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-        accentColor: Colors.amber,
-        canvasColor: Color.fromRGBO(255, 254, 229, 1),
-        fontFamily: 'Raleway',
-        textTheme: ThemeData.light().textTheme.copyWith(
-              bodyText1: TextStyle(
-                color: Color.fromRGBO(20, 51, 51, 1),
-              ),
-              bodyText2: TextStyle(
-                color: Color.fromRGBO(20, 51, 51, 1),
-              ),
-              headline6: TextStyle(
-                fontSize: 20,
-                fontFamily: 'RobotoCondensed',
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-      ),
+      theme: ThemeData(),
       home: CategoriesScreen(),
+      // Register as route
       routes: {
         '/category-meals': (context) => CategoryMealsScreen(),
       },
@@ -100,15 +82,10 @@ The page from where user will go the next page, have to pass that data that are 
 
 ```dart
 class CategoryItem extends StatelessWidget {
-  final String id;
-  final String title;
-  final Color color;
-
-  CategoryItem(this.id, this.title, this.color);
 
   void selectCategory(BuildContext context) {
     // Pass the data through named routes;
-    // name of the routes "/category-meals" should match that is defined in main.dart file
+    // name of the routes "/category-meals" should match that is defined in main.dart file at the tile of registration
     Navigator.of(context).pushNamed(
       '/category-meals',
       arguments: {'id': id, 'title': title},
@@ -119,26 +96,6 @@ class CategoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => selectCategory(context),
-      splashColor: Theme.of(context).primaryColor,
-      borderRadius: BorderRadius.circular(15),
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.headline6,
-        ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              color.withOpacity(0.7),
-              color,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(15),
-        ),
-      ),
     );
   }
 }
@@ -153,7 +110,7 @@ class CategoryMealsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Extract the arguments passed to this page
+    // Extract the arguments passed to this page via modal route settions
     final routeArgs =
         ModalRoute.of(context).settings.arguments as Map<String, String>;
     final categoryId = routeArgs['id'];
@@ -225,7 +182,7 @@ routes: {
   CategoryMealsScreen.routeName: (context) => CategoryMealsScreen(),
   // MealDetailScreen.routeName: (context) => MealDetailScreen(),
 },
-// When not registered the route here, then ihe route will go to this
+// When not registered the route name into the routes, then this route will go to this
 // onGenerateRoute and then load the CategoriesScreen Widget as screen
 onGenerateRoute: (settings) {
   print(settings.arguments);
@@ -240,7 +197,7 @@ onGenerateRoute: (settings) {
 },
 
 // onUnknownRoute is reached when flutter failed to build the screen with all other measures.
-// When defined nothing as a route and don't use onGenerateRoute, then as the last, it will executed.
+// When defined nothing as a route and don't use onGenerateRoute, then as the last, it will be executed.
 // It is like 404 page like web
 onUnknownRoute: (settings) {
   return MaterialPageRoute(
