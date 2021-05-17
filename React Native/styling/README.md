@@ -105,3 +105,88 @@ const styles = StyleSheet.create({
     },
 });
 ```
+
+## Add Local Image:
+```js
+import React from 'react';
+import { View, STyleSheet, Image } from 'react-native';
+
+const ImageContainer = props => {
+    return (
+        <View style = {styles.imageContainer}>
+            <Image 
+                source={require('../assets/success.png')}
+                style={styles.image}
+                resizeMode='cover'
+            />
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    imageContainer: {
+        width: 300,
+        height: 300,
+        borderRadius: 150,
+        borderWidth: 3,
+        borderColor: '#000',
+        overflow: 'hidden',
+        marginVertical: 30,
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+    },
+});
+```
+
+## Add Network Image:
+```js
+import React from 'react';
+import { View, STyleSheet, Image } from 'react-native';
+
+const ImageContainer = props => {
+    return (
+        <View style = {styles.imageContainer}>
+            <Image 
+                source={{uri: 'https://cdn.pixabay.com/photo/2016/05/05/23/52/mountain-summit-1375015_960_720.jpg'}}
+                style={styles.image}
+                resizeMode='cover'
+            />
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    imageContainer: {
+        width: 300,
+        height: 300,
+        borderRadius: 150,
+        borderWidth: 3,
+        borderColor: '#000',
+        overflow: 'hidden',
+        marginVertical: 30,
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+    },
+});
+```
+
+## Add Icons:
+```js
+import React from 'react';
+import { View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
+const IconContainer = props => {
+    return (
+        <View>
+            <Ionicons name = 'md-add' size={24} color = '#fff'/>
+        </View>
+    );
+};
+
+export default IconContainer;
+```
