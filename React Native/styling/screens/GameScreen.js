@@ -1,6 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, ScrollView } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Alert,
+    ScrollView,
+    Dimensions,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import * as ScreenOrientation from 'expo-screen-orientation'; // expo install expo-screen-orientation
 
 import NumberContainer from '../components/NumberContainer';
 import Card from '../components/Card';
@@ -21,20 +29,42 @@ const generateRandomBetween = (min, max, exclude) => {
 };
 
 const renderListItem = (value, numOfRound) => (
-    <View key={value} style = {styles.listItem}>
+    <View key={value} style={styles.listItem}>
         <BodyText>#{numOfRound}</BodyText>
         <BodyText>{value}</BodyText>
     </View>
 );
 
 const GameScreen = (props) => {
+    // ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
+
+
     const initialGuess = generateRandomBetween(1, 100, props.userChoice);
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
     const [pastGuesses, setPassGuesses] = useState([initialGuess]);
+    const [availableDeviceWidth, setAvailableDeviceWidth] = useState(
+        Dimensions.get('window').width
+    );
+    const [availableDeviceHeight, setAvailableDeviceHeight] = useState(
+        Dimensions.get('window').height
+    );
     const currentLow = useRef(1);
     const currentHigh = useRef(100);
 
     const { userChoice, onGameOver } = props;
+
+    useEffect(() => {
+        const updateLayout = () => {
+            setAvailableDeviceWidth(Dimensions.get('window').width);
+            setAvailableDeviceHeight(Dimensions.get('window').height);
+        };
+
+        Dimensions.addEventListener('change', updateLayout);
+
+        return () => {
+            Dimensions.removeEventListener('change', updateLayout);
+        };
+    });
 
     useEffect(() => {
         if (currentGuess === userChoice) {
@@ -67,6 +97,32 @@ const GameScreen = (props) => {
         setPassGuesses((curPastGuesses) => [nextNumber, ...curPastGuesses]);
     };
 
+    if (availableDeviceHeight < 500) {
+        return (
+            <View style={styles.screen}>
+                <Text style={DefaultStyles.title}>Opponent's Guess</Text>
+                <View style={styles.controls}>
+                    <MainButton onPress={nextGuessHandler.bind(this, 'lower')}>
+                        <Ionicons name="md-remove" size={24} color="#fff" />
+                    </MainButton>
+                    <NumberContainer>{currentGuess}</NumberContainer>
+                    <MainButton
+                        onPress={nextGuessHandler.bind(this, 'greater')}
+                    >
+                        <Ionicons name="md-add" size={24} color="#fff" />
+                    </MainButton>
+                </View>
+                <View style={styles.list}>
+                    <ScrollView>
+                        {pastGuesses.map((guess, index) =>
+                            renderListItem(guess, pastGuesses.length - index)
+                        )}
+                    </ScrollView>
+                </View>
+            </View>
+        );
+    }
+
     return (
         <View style={styles.screen}>
             <Text style={DefaultStyles.title}>Opponent's Guess</Text>
@@ -79,9 +135,11 @@ const GameScreen = (props) => {
                     <Ionicons name="md-add" size={24} color="#fff" />
                 </MainButton>
             </Card>
-            <View style = {styles.list}>
+            <View style={styles.list}>
                 <ScrollView>
-                    {pastGuesses.map((guess, index) => renderListItem(guess, pastGuesses.length - index))}
+                    {pastGuesses.map((guess, index) =>
+                        renderListItem(guess, pastGuesses.length - index)
+                    )}
                 </ScrollView>
             </View>
         </View>
@@ -97,9 +155,15 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        marginTop: 20,
+        marginTop: Dimensions.get('window').height > 600 ? 20 : 5,
         width: 300,
         maxWidth: '90%^',
+    },
+    controls: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        width: '80%',
     },
     list: {
         flex: 1,
