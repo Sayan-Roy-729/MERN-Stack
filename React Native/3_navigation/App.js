@@ -7,6 +7,7 @@ import { enableScreens } from 'react-native-screens';
 import MealsNavigator from './navigation/MealsNavigator';
 
 enableScreens();
+// npm install --save react-navigation-header-buttons@6
 
 const fetchFonts = () => {
     return Font.loadAsync({
