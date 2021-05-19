@@ -544,3 +544,70 @@ const styles = StyleSheet.create({
     },
 });
 ```
+
+## Grid Display:
+
+```js
+const CategoriesScreen = (props) => {
+    const renderGridItem = (itemData) => {
+        return (
+            <TouchableOpacity
+                onPress={() => {
+                    props.navigation.navigate({ routeName: 'CategoryMeals', params: {
+                        categoryId: itemData.item.id,
+                    }, });
+                }}
+                style={styles.gridItem}
+            >
+                <View>
+                    <Text>{itemData.item.title}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
+    return (
+        {/* Create Grid */}
+        <FlatList
+            keyExtractor={(item, index) => item.id}
+            data={CATEGORIES}
+            renderItem={renderGridItem}
+            numColumns={2}
+        />
+    );
+};
+```
+
+## Add Background Image:
+Which content will be covered with the background image, wrap that contents with `ImageBackground`.
+```js
+<View style = {{...styles.mealRow, ...styles.mealHeader}}>
+    <ImageBackground source = {{uri: props.image}} style = {styles.bgImage}>
+        <View style = {styles.titleContainer}>
+            <Text style = {styles.title} numberOfLines = {1}>{props.title}</Text>
+        </View>
+    </ImageBackground>
+</View>
+
+const styles = StyleSheet.create({
+    bgImage: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'flex-end',
+    },
+    mealRow: {
+        flexDirection: 'row',
+    },
+    titleContainer: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        paddingVertical: 5,
+        paddingHorizontal: 12,
+    },
+    title: {
+        fontFamily: 'open-sans-bold',
+        fontSize: 20,
+        color: '#fff',
+        textAlign: 'center',
+    },
+});
+```
