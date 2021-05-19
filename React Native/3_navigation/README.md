@@ -312,3 +312,323 @@ CategoryMealsScreen.navigationOptions = (navigationData) => {
     };
 };
 ```
+>## Add Buttons in Header AppBar:
+- **STEP-1:** Create a custom header button inside the `HeaderButton.js` file.
+
+```js
+import React from 'react';
+import { Platform } from 'react-native';
+import { HeaderButton } from 'react-navigation-header-buttons'; // npm install --save react-navigation-header-buttons
+import { Ionicons } from '@expo/vector-icons';
+
+import Colors from '../Constants/Colors';
+
+const CustomHeaderButton = (props) => {
+    return (
+        <HeaderButton
+            {...props}
+            IconComponent={Ionicons}
+            iconSize={23}
+            color={Platform.OS === 'android' ? '#fff' : Colors.primaryColor}
+        />
+    );
+};
+
+export default CustomHeaderButton;
+```
+
+- **STEP-2:** Define the header buttons where or in which page is required.
+
+```js
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
+import { MEALS } from '../data/dummy-data';
+// Import the our custom header button
+import CustomHeaderButton from '../components/HeaderButton';
+
+const MealDetailsScreen = props => {
+    return (
+        <View>
+            <Text>Add Header Button</Text>
+        </View>
+    );
+};
+
+MealDetailsScreen.navigationOptions = (navigationData) => {
+    const mealId = navigationData.navigation.getParam('mealId');
+    const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+
+    return {
+        headerTitle: selectedMeal.title,
+        // Define header buttons
+        headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+                <Item
+                    title="Favorite"
+                    iconName="ios-star"
+                    onPress={() => {
+                        console.log('Mark as favorite!');
+                    }}
+                />
+                <Item
+                    title="Favorite-outline"
+                    iconName="ios-star-outline"
+                    onPress={() => {
+                        console.log('Mark as favorite!');
+                    }}
+                />
+            </HeaderButtons>
+        ),
+    };
+};
+```
+
+>## Tab Based Navigation:
+>### IOS Like Tabs
+```js
+import React from 'react';
+import { Platform } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs'; // npm install --save react-navigation-tabs
+import { Ionicons } from '@expo/vector-icons';
+
+import CategoriesScreen from '../screens/CategoriesScreen';
+import CategoryMealsScreen from '../screens/CategoryMealsScreen';
+import MealDetailScreen from '../screens/MealDetailScreen';
+import FavoritesScreen from '../screens/FavoritesScreen';
+import Colors from '../Constants/Colors';
+
+// The forward backward screen navigation
+const MealNavigator = createStackNavigator(
+    {
+        Categories: {
+            screen: CategoriesScreen,
+            navigationOptions: {
+                headerTitle: 'Meal Categories',
+            },
+        },
+        CategoryMeals: {
+            screen: CategoryMealsScreen,
+        },
+        MealDetail: MealDetailScreen,
+    },
+    {
+        mode: 'modal',
+        initialRouteName: 'Categories',
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor:
+                    Platform.OS === 'android' ? Colors.primaryColor : '#fff',
+            },
+            headerTintColor:
+                Platform.OS === 'android' ? '#fff' : Colors.primaryColor,
+        },
+    }
+);
+
+// Configure Bottom tabs navigation
+const MealsFavNavigator = createBottomTabNavigator(
+    {
+        Meals: {
+            screen: MealNavigator,
+            navigationOptions: {
+                // Add Icon
+                tabBarIcon: (tabInfo) => {
+                    return (
+                        <Ionicons
+                            name="ios-restaurant"
+                            size={25}
+                            color={tabInfo.tintColor}
+                        />
+                    );
+                },
+            },
+        },
+        Favorites: {
+            screen: FavoritesScreen,
+            navigationOptions: {
+                tabBarLabel: 'Favorites!',
+                tabBarIcon: (tabInfo) => {
+                    return (
+                        <Ionicons
+                            name="ios-star"
+                            size={25}
+                            color={tabInfo.tintColor}
+                        />
+                    );
+                },
+            },
+        },
+    },
+    {
+        // Select color when the tab is open
+        tabBarOptions: {
+            activeTintColor: Colors.accentColor,
+        },
+    }
+);
+
+export default createAppContainer(MealsFavNavigator);
+
+```
+
+>### Android Like Tabs (MaterialBottomTabs):
+
+```js
+import React from 'react';
+import { Platform } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+
+import CategoriesScreen from '../screens/CategoriesScreen';
+import CategoryMealsScreen from '../screens/CategoryMealsScreen';
+import MealDetailScreen from '../screens/MealDetailScreen';
+import FavoritesScreen from '../screens/FavoritesScreen';
+import Colors from '../Constants/Colors';
+
+// npm install --save react-navigation-material-bottom-tabs
+// npm install --save react-native-paper
+
+const MealNavigator = createStackNavigator(
+    {
+        Categories: {
+            screen: CategoriesScreen,
+            navigationOptions: {
+                headerTitle: 'Meal Categories',
+            },
+        },
+        CategoryMeals: {
+            screen: CategoryMealsScreen,
+        },
+        MealDetail: MealDetailScreen,
+    },
+    {
+        mode: 'modal',
+        initialRouteName: 'Categories',
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor:
+                    Platform.OS === 'android' ? Colors.primaryColor : '#fff',
+            },
+            headerTintColor:
+                Platform.OS === 'android' ? '#fff' : Colors.primaryColor,
+        },
+    }
+);
+
+const tabScreenConfig = {
+    Meals: {
+        screen: MealNavigator,
+        navigationOptions: {
+            tabBarIcon: (tabInfo) => {
+                return (
+                    <Ionicons
+                        name="ios-restaurant"
+                        size={25}
+                        color={tabInfo.tintColor}
+                    />
+                );
+            },
+            tabBarColor: Colors.primaryColor,
+        },
+    },
+    Favorites: {
+        screen: FavoritesScreen,
+        navigationOptions: {
+            tabBarLabel: 'Favorites!',
+            tabBarIcon: (tabInfo) => {
+                return (
+                    <Ionicons
+                        name="ios-star"
+                        size={25}
+                        color={tabInfo.tintColor}
+                    />
+                );
+            },
+            tabBarColor: Colors.primaryColor,
+        },
+    },
+};
+
+// Configure Bottom tabs
+const MealsFavNavigator =
+    Platform.OS === 'android'
+        // Define MaterialBottomTabs
+        ? createMaterialBottomTabNavigator(tabScreenConfig, {
+              activeColor: '#fff',
+              shifting: true,
+              barStyle: {
+                  backgroundColor: Colors.primaryColor,
+              },
+          })
+          // This is ios look bottom tab bars
+        : createBottomTabNavigator(tabScreenConfig, {
+              tabBarOptions: {
+                  activeTintColor: Colors.accentColor,
+              },
+          });
+
+export default createAppContainer(MealsFavNavigator);
+```
+
+## Menu Button & Side Drawer Navigation:
+- **STEP-1:** Define the drawer navigation. 
+
+```js
+import { createDrawerNavigator } from 'react-navigation-drawer'; // npm install --save react-navigation-drawer
+
+const FiltersNavigator = createStackNavigator(
+    {
+        Filters: FiltersScreen,
+    },
+    {
+        navigationOptions: {
+            drawerLabel: 'Filters!!',
+        },
+        defaultNavigationOptions: {
+            headerStyle: {
+                backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : '',
+            },
+            headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
+            headerTitle: 'A Screen',
+        },
+    }
+);
+
+// Create Side Drawer
+const MainNavigator = createDrawerNavigator({
+    MealsFavs: { screen: MealsFavTabNavigator, navigationOptions: {
+        drawerLabel: 'Meals',
+    } },
+    Filters: FiltersNavigator,
+}, {
+    // Style the drawer
+    contentOptions: {
+        activeTintColor: Colors.accentColor,
+        labelStyle: {
+            fontFamily: 'open-sans-bold',
+        },
+    },
+});
+
+export default createAppContainer(MainNavigator);
+```
+
+- **STEP-2:** For activating the drawer, have to define by ourselves. Add the below code in that page files where drawer is required. For the `HeaderButton` see the above codes (`Add Buttons in Header AppBar`).
+
+```js
+CategoriesScreen.navigationOptions = (navData) => {
+    return {
+        headerTitle: 'Meal Categories',
+        headerLeft: <HeaderButtons HeaderButtonComponent = {HeaderButton}>
+            <Item title = 'Menu' iconName = 'ios-menu' onPress = {() => {
+                navData.navigation.toggleDrawer();
+            }}/>
+        </HeaderButtons>
+    };
+};
+```
