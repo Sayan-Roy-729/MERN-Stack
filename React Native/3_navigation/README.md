@@ -64,7 +64,7 @@ export default createAppContainer(MealNavigator);
 
 ```js
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native'; 
+import { StyleSheet, Text, View } from 'react-native';
 import { enableScreens } from 'react-native-screens'; // npm install --save react-native-screens
 
 import MealsNavigator from './navigation/MealsNavigator';
@@ -312,8 +312,10 @@ CategoryMealsScreen.navigationOptions = (navigationData) => {
     };
 };
 ```
->## Add Buttons in Header AppBar:
-- **STEP-1:** Create a custom header button inside the `HeaderButton.js` file.
+
+> ## Add Buttons in Header AppBar:
+
+-   **STEP-1:** Create a custom header button inside the `HeaderButton.js` file.
 
 ```js
 import React from 'react';
@@ -337,7 +339,7 @@ const CustomHeaderButton = (props) => {
 export default CustomHeaderButton;
 ```
 
-- **STEP-2:** Define the header buttons where or in which page is required.
+-   **STEP-2:** Define the header buttons where or in which page is required.
 
 ```js
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -346,7 +348,7 @@ import { MEALS } from '../data/dummy-data';
 // Import the our custom header button
 import CustomHeaderButton from '../components/HeaderButton';
 
-const MealDetailsScreen = props => {
+const MealDetailsScreen = (props) => {
     return (
         <View>
             <Text>Add Header Button</Text>
@@ -383,8 +385,10 @@ MealDetailsScreen.navigationOptions = (navigationData) => {
 };
 ```
 
->## Tab Based Navigation:
->### IOS Like Tabs
+> ## Tab Based Navigation:
+>
+> ### IOS Like Tabs
+
 ```js
 import React from 'react';
 import { Platform } from 'react-native';
@@ -470,10 +474,9 @@ const MealsFavNavigator = createBottomTabNavigator(
 );
 
 export default createAppContainer(MealsFavNavigator);
-
 ```
 
->### Android Like Tabs (MaterialBottomTabs):
+> ### Android Like Tabs (MaterialBottomTabs):
 
 ```js
 import React from 'react';
@@ -557,16 +560,16 @@ const tabScreenConfig = {
 // Configure Bottom tabs
 const MealsFavNavigator =
     Platform.OS === 'android'
-        // Define MaterialBottomTabs
-        ? createMaterialBottomTabNavigator(tabScreenConfig, {
+        ? // Define MaterialBottomTabs
+          createMaterialBottomTabNavigator(tabScreenConfig, {
               activeColor: '#fff',
               shifting: true,
               barStyle: {
                   backgroundColor: Colors.primaryColor,
               },
           })
-          // This is ios look bottom tab bars
-        : createBottomTabNavigator(tabScreenConfig, {
+        : // This is ios look bottom tab bars
+          createBottomTabNavigator(tabScreenConfig, {
               tabBarOptions: {
                   activeTintColor: Colors.accentColor,
               },
@@ -576,7 +579,8 @@ export default createAppContainer(MealsFavNavigator);
 ```
 
 ## Menu Button & Side Drawer Navigation:
-- **STEP-1:** Define the drawer navigation. 
+
+-   **STEP-1:** Define the drawer navigation.
 
 ```js
 import { createDrawerNavigator } from 'react-navigation-drawer'; // npm install --save react-navigation-drawer
@@ -591,49 +595,63 @@ const FiltersNavigator = createStackNavigator(
         },
         defaultNavigationOptions: {
             headerStyle: {
-                backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : '',
+                backgroundColor:
+                    Platform.OS === 'android' ? Colors.primaryColor : '',
             },
-            headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
+            headerTintColor:
+                Platform.OS === 'android' ? 'white' : Colors.primaryColor,
             headerTitle: 'A Screen',
         },
     }
 );
 
 // Create Side Drawer
-const MainNavigator = createDrawerNavigator({
-    MealsFavs: { screen: MealsFavTabNavigator, navigationOptions: {
-        drawerLabel: 'Meals',
-    } },
-    Filters: FiltersNavigator,
-}, {
-    // Style the drawer
-    contentOptions: {
-        activeTintColor: Colors.accentColor,
-        labelStyle: {
-            fontFamily: 'open-sans-bold',
+const MainNavigator = createDrawerNavigator(
+    {
+        MealsFavs: {
+            screen: MealsFavTabNavigator,
+            navigationOptions: {
+                drawerLabel: 'Meals',
+            },
         },
+        Filters: FiltersNavigator,
     },
-});
+    {
+        // Style the drawer
+        contentOptions: {
+            activeTintColor: Colors.accentColor,
+            labelStyle: {
+                fontFamily: 'open-sans-bold',
+            },
+        },
+    }
+);
 
 export default createAppContainer(MainNavigator);
 ```
 
-- **STEP-2:** For activating the drawer, have to define by ourselves. Add the below code in that page files where drawer is required. For the `HeaderButton` see the above codes (`Add Buttons in Header AppBar`).
+-   **STEP-2:** For activating the drawer, have to define by ourselves. Add the below code in that page files where drawer is required. For the `HeaderButton` see the above codes (`Add Buttons in Header AppBar`).
 
 ```js
 CategoriesScreen.navigationOptions = (navData) => {
     return {
         headerTitle: 'Meal Categories',
-        headerLeft: <HeaderButtons HeaderButtonComponent = {HeaderButton}>
-            <Item title = 'Menu' iconName = 'ios-menu' onPress = {() => {
-                navData.navigation.toggleDrawer();
-            }}/>
-        </HeaderButtons>
+        headerLeft: (
+            <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                <Item
+                    title="Menu"
+                    iconName="ios-menu"
+                    onPress={() => {
+                        navData.navigation.toggleDrawer();
+                    }}
+                />
+            </HeaderButtons>
+        ),
     };
 };
 ```
 
->## Passing Data Between Component & Navigation Option (Header) (setParams & getParams):
+> ## Passing Data Between Component & Navigation Option (Header) (setParams & getParams):
 
 ```js
 import React, { useState, useEffect, useCallback } from 'react';
@@ -756,5 +774,444 @@ const styles = StyleSheet.create({
 });
 
 export default FiltersScreen;
-
 ```
+
+# All Navigation together:
+
+```js
+import React from 'react';
+import { Platform, Text } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+
+import CategoriesScreen from '../screens/CategoriesScreen';
+import CategoryMealsScreen from '../screens/CategoryMealsScreen';
+import MealDetailScreen from '../screens/MealDetailScreen';
+import FavoritesScreen from '../screens/FavoritesScreen';
+import FiltersScreen from '../screens/FiltersScreen';
+import Colors from '../Constants/Colors';
+
+// npm install --save react-navigation-material-bottom-tabs
+// npm install --save react-native-paper
+// npm install --save react-navigation-drawer
+
+const defaultStackNavOptions = {
+    headerStyle: {
+        backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : '',
+    },
+    headerTitleStyle: {
+        fontFamily: 'open-sans-bold',
+    },
+    headerBackTitleStyle: {
+        fontFamily: 'open-sans',
+    },
+    headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
+    headerTitle: 'A Screen',
+};
+
+const MealsNavigator = createStackNavigator(
+    {
+        Categories: {
+            screen: CategoriesScreen,
+        },
+        CategoryMeals: {
+            screen: CategoryMealsScreen,
+        },
+        MealDetail: MealDetailScreen,
+    },
+    {
+        // initialRouteName: 'Categories',
+        defaultNavigationOptions: defaultStackNavOptions,
+    }
+);
+
+const FavNavigator = createStackNavigator(
+    {
+        Favorites: FavoritesScreen,
+        MealDetail: MealDetailScreen,
+    },
+    {
+        // initialRouteName: 'Categories',
+        defaultNavigationOptions: defaultStackNavOptions,
+    }
+);
+
+const tabScreenConfig = {
+    Meals: {
+        screen: MealsNavigator,
+        navigationOptions: {
+            tabBarIcon: (tabInfo) => {
+                return (
+                    <Ionicons
+                        name="ios-restaurant"
+                        size={25}
+                        color={tabInfo.tintColor}
+                    />
+                );
+            },
+            tabBarColor: Colors.primaryColor,
+        },
+    },
+    Favorites: {
+        screen: FavNavigator,
+        navigationOptions: {
+            tabBarIcon: (tabInfo) => {
+                return (
+                    <Ionicons
+                        name="ios-star"
+                        size={25}
+                        color={tabInfo.tintColor}
+                    />
+                );
+            },
+            tabBarColor: Colors.accentColor,
+            tabBarLabel:
+                Platform.OS === 'android' ? (
+                    <Text style={{ fontFamily: 'open-sans-bold' }}>Meals</Text>
+                ) : (
+                    'Meals'
+                ),
+        },
+    },
+};
+
+const MealsFavTabNavigator =
+    Platform.OS === 'android'
+        ? createMaterialBottomTabNavigator(tabScreenConfig, {
+              activeTintColor: 'white',
+              shifting: true,
+              barStyle: {
+                  backgroundColor: Colors.primaryColor,
+              },
+          })
+        : createBottomTabNavigator(tabScreenConfig, {
+              tabBarOptions: {
+                  labelStyle: {
+                      fontFamily: 'open-sans-bold',
+                  },
+                  activeTintColor: Colors.accentColor,
+              },
+          });
+
+const FiltersNavigator = createStackNavigator(
+    {
+        Filters: FiltersScreen,
+    },
+    {
+        // navigationOptions: {
+        //     drawerLabel: 'Filters!!',
+        // },
+        defaultNavigationOptions: defaultStackNavOptions,
+    }
+);
+
+// Create Side Drawer
+const MainNavigator = createDrawerNavigator(
+    {
+        MealsFavs: {
+            screen: MealsFavTabNavigator,
+            navigationOptions: {
+                drawerLabel: 'Meals',
+            },
+        },
+        Filters: FiltersNavigator,
+    },
+    {
+        contentOptions: {
+            activeTintColor: Colors.accentColor,
+            labelStyle: {
+                fontFamily: 'open-sans-bold',
+            },
+        },
+    }
+);
+
+export default createAppContainer(MainNavigator);
+```
+
+> # Redux:
+
+> ## Pass Redux Data with Navigation Options:
+>
+> ### Option-1:
+>
+> The required value is passed with `setParams()` & `getParams()` method and to avoid the unnecessary re-render, have to wrap with `useEffect()`. The hook is run after the component already re-render once. So the required data is coming in the navigation options are late. And that is not beautiful or user friendly.
+
+```js
+import React, { useEffect } from 'react';
+import { StyleSheet, View, Text, ScrollView, Image } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useSelector } from 'react-redux';
+
+import DefaultText from '../components/DefaultText';
+import CustomHeaderButton from '../components/HeaderButton';
+
+const ListItem = (props) => {
+    return (
+        <View style={styles.listItem}>
+            <DefaultText>{props.children}</DefaultText>
+        </View>
+    );
+};
+
+const MealDetailsScreen = (props) => {
+    const availableMeals = useSelector((state) => state.meals.meals);
+
+    const mealId = props.navigation.getParam('mealId');
+    const selectedMeal = availableMeals.find((meal) => meal.id === mealId);
+
+    useEffect(() => {
+        props.navigation.setParams({
+            mealTitle: selectedMeal.title,
+        });
+    }, [selectedMeal]);
+
+    return (
+        <ScrollView>
+            <Image
+                source={{ uri: selectedMeal.imageUrl }}
+                style={styles.image}
+            />
+            <View style={styles.details}>
+                <DefaultText>{selectedMeal.duration}m</DefaultText>
+                <DefaultText>
+                    {selectedMeal.complexity.toUpperCase()}
+                </DefaultText>
+                <DefaultText>
+                    {selectedMeal.affordability.toUpperCase()}
+                </DefaultText>
+            </View>
+            <Text style={styles.title}>Ingredients</Text>
+            {selectedMeal.ingredients.map((ingredient) => (
+                <ListItem key={ingredient}>{ingredient}</ListItem>
+            ))}
+            <Text style={styles.title}>Steps</Text>
+            {selectedMeal.steps.map((step) => (
+                <ListItem key={step}>{step}</ListItem>
+            ))}
+        </ScrollView>
+    );
+};
+
+MealDetailsScreen.navigationOptions = (navigationData) => {
+    const mealId = navigationData.navigation.getParam('mealId');
+    const mealTitle = navigationData.navigation.getParam('mealTitle');
+    // const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+
+    return {
+        headerTitle: mealTitle,
+        headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+                <Item
+                    title="Favorite"
+                    iconName="ios-star"
+                    onPress={() => {
+                        console.log('Mark as favorite!');
+                    }}
+                />
+            </HeaderButtons>
+        ),
+    };
+};
+
+const styles = StyleSheet.create({
+    image: {
+        width: '100%',
+        height: 200,
+    },
+    details: {
+        flexDirection: 'row',
+        padding: 15,
+        justifyContent: 'space-around',
+    },
+    title: {
+        fontFamily: 'open-sans-bold',
+        fontSize: 22,
+        textAlign: 'center',
+    },
+    listItem: {
+        marginVertical: 10,
+        marginHorizontal: 20,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        padding: 10,
+    },
+});
+
+export default MealDetailsScreen;
+```
+>### Option-2:
+ To solve the issue of `option-1`, add the data into `params` in one step above component and pass the data.
+
+ The component (here it is sub-component) where can pass the data already
+
+ ```js
+ import React from 'react';
+import { View, FlatList, StyleSheet } from 'react-native';
+
+import MealItem from './MealItem';
+
+const MealList = props => {
+    const renderMealItem = (itemData) => {
+        return (
+            <MealItem
+                title={itemData.item.title}
+                duration={itemData.item.duration}
+                complexity={itemData.item.complexity}
+                affordability={itemData.item.affordability}
+                image={itemData.item.imageUrl}
+                OnSelectMeal={() => {
+                    props.navigation.navigate({
+                        routeName: 'MealDetail',
+                        params: {
+                            mealId: itemData.item.id,
+                            // Passing the required data
+                            mealTitle: itemData.item.title,
+                        },
+                    });
+                }}
+            />
+        );
+    };
+
+    return (
+        <View style={styles.list}>
+            <FlatList
+                data={props.listData}
+                keyExtractor={(item, index) => item.id}
+                renderItem={renderMealItem}
+                style={{ width: '100%' }}
+            />
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    list: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 15,
+    },
+});
+
+export default MealList;
+ ``` 
+
+ >## Passing Redux Action through Navigation Options:
+
+ ```js
+ import React, { useEffect, useCallback } from 'react';
+import { StyleSheet, View, Text, ScrollView, Image } from 'react-native';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useSelector, useDispatch } from 'react-redux';
+
+import DefaultText from '../components/DefaultText';
+import CustomHeaderButton from '../components/HeaderButton';
+// Import action function
+import { toggleFavorite } from '../store/actions/meals';
+
+const ListItem = (props) => {
+    return (
+        <View style={styles.listItem}>
+            <DefaultText>{props.children}</DefaultText>
+        </View>
+    );
+};
+
+const MealDetailsScreen = (props) => {
+    const availableMeals = useSelector((state) => state.meals.meals);
+
+    const mealId = props.navigation.getParam('mealId');
+    const selectedMeal = availableMeals.find((meal) => meal.id === mealId);
+
+    const dispatch = useDispatch();
+
+    const toggleFavoriteHandler = useCallback(() => {
+        dispatch(toggleFavorite(mealId));
+    }, [dispatch, mealId]);
+
+    useEffect(() => {
+        // props.navigation.setParams({
+        //     mealTitle: selectedMeal.title,
+        // });
+        props.navigation.setParams({toggleFav: toggleFavoriteHandler});
+    }, [toggleFavoriteHandler]);
+
+    return (
+        <ScrollView>
+            <Image
+                source={{ uri: selectedMeal.imageUrl }}
+                style={styles.image}
+            />
+            <View style={styles.details}>
+                <DefaultText>{selectedMeal.duration}m</DefaultText>
+                <DefaultText>
+                    {selectedMeal.complexity.toUpperCase()}
+                </DefaultText>
+                <DefaultText>
+                    {selectedMeal.affordability.toUpperCase()}
+                </DefaultText>
+            </View>
+            <Text style={styles.title}>Ingredients</Text>
+            {selectedMeal.ingredients.map((ingredient) => (
+                <ListItem key={ingredient}>{ingredient}</ListItem>
+            ))}
+            <Text style={styles.title}>Steps</Text>
+            {selectedMeal.steps.map((step) => (
+                <ListItem key={step}>{step}</ListItem>
+            ))}
+        </ScrollView>
+    );
+};
+
+MealDetailsScreen.navigationOptions = (navigationData) => {
+    // const mealId = navigationData.navigation.getParam('mealId');
+    const mealTitle = navigationData.navigation.getParam('mealTitle');
+    const toggleFavorite = navigationData.navigation.getParam('toggleFav');
+    // const selectedMeal = MEALS.find((meal) => meal.id === mealId);
+
+    return {
+        headerTitle: mealTitle,
+        headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+                <Item
+                    title="Favorite"
+                    iconName="ios-star"
+                    onPress={toggleFavorite}
+                />
+            </HeaderButtons>
+        ),
+    };
+};
+
+const styles = StyleSheet.create({
+    image: {
+        width: '100%',
+        height: 200,
+    },
+    details: {
+        flexDirection: 'row',
+        padding: 15,
+        justifyContent: 'space-around',
+    },
+    title: {
+        fontFamily: 'open-sans-bold',
+        fontSize: 22,
+        textAlign: 'center',
+    },
+    listItem: {
+        marginVertical: 10,
+        marginHorizontal: 20,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        padding: 10,
+    },
+});
+
+export default MealDetailsScreen;
+ ```
