@@ -611,3 +611,16 @@ const styles = StyleSheet.create({
     },
 });
 ```
+
+## Toggle Switch Button:
+
+```js
+import { Switch } from 'react-native';
+
+<Switch
+    value={props.state}
+    onValueChange={props.onChange}
+    trackColor={{ true: Colors.primaryColor }}
+    thumbColor={Platform.OS === 'android' ? Colors.accentColor : ''}
+/>
+```
