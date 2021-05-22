@@ -108,6 +108,14 @@ These widgets are used to add events of a widget. These widgets create different
 </TouchableOpacity>
 ```
 
+```js
+<TouchableNativeFeedback onPress={props.OnDelete} useForeground>
+    <View style={styles.listItem}>
+        <Text>{props.title}</Text>
+    </View>
+</TouchableNativeFeedback>
+```
+
 ## Modal Widget:
 When `visible` will be `true`, modal will be open and vice-versa.  
 ```js
