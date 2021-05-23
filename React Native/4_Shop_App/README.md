@@ -1,36 +1,39 @@
 # User Input:
 
 ## Configuring TextInput:
-- For user input validation, can use 3rd party packages like `validate.js`.
+
+-   For user input validation, can use 3rd party packages like `validate.js`.
 
 ```js
 <TextInput
     style={styles.input}
     value={title}
     onChangeText={(text) => setTitle(text)}
-    keyboardType='default'
-    autoCapitalize='sentences'
+    keyboardType="default"
+    autoCapitalize="sentences"
     autoCorrect
-    returnKeyType='next'
-    onEndEditing = {() => console.log('onEndEdition')}
+    returnKeyType="next"
+    onEndEditing={() => console.log('onEndEdition')}
     onSubmitEditing={() => console.log('onSubmitEdition')}
 />
 ```
 
 ## Show Loading Spinner:
+
 ```js
 import { ActivityIndicator } from 'react-native';
 
 if (isLoading) {
     return (
-        <View style = {styles.centered}>
-            <ActivityIndicator size = 'large' color = {Colors.primary}/>
+        <View style={styles.centered}>
+            <ActivityIndicator size="large" color={Colors.primary} />
         </View>
     );
 }
 ```
 
 ## Navigation Listener:
+
 In the navigation, if user goes from one page to another page through drawer then the pages will render only for 1st time. Next times, these pages are kept as catch in memory and display that again. Don't re-render again. But if sometime api call is required to re-render, then it will not run. Then the updated changes will not available in the app. To avoid this, there are the methods when have to listen and re-render the components.
 
 ```js
@@ -75,4 +78,40 @@ const loadProducts = useCallback(async () => {
     keyExtractor={(item) => item.id}
     renderItem={(itemData) => ()
 />
+```
+
+# Authentication:
+
+## `createSwitchNavigator`:
+
+```js
+import { createSwitchNavigator } from 'react-navigation';
+
+const AuthNavigator = createSwitchNavigator(
+    {
+        Auth: AuthScreen,
+    },
+    {
+        defaultNavigationOptions: defaultNavOptions,
+    }
+);
+
+// It always display one screen and can't go back to another screen if you navigate to a different one.
+// Going back is not allowed.
+const MainNavigator = createSwitchNavigator({
+    Auth: AuthNavigator,
+    Shop: ShopNavigator,
+});
+```
+
+## Gradient Background:
+
+```js
+import { LinearGradient } from 'expo-linear-gradient'; // npm install --save expo-linear-gradient
+
+<LinearGradient colors={['#ffedff', '#ffe3ff']} style = {styles.gradient}>
+    <View>
+        <Text>Other Contents</Text>
+    </View>
+</LinearGradient>
 ```
