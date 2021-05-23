@@ -3,7 +3,7 @@ import { View, ActivityIndicator, StyleSheet, } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 
-import { Colors } from '../constants/Colors';
+import Colors from '../constants/Colors';
 import * as authActions from '../store/actions/auth';
 
 const StartupScreen = props => {
@@ -25,8 +25,10 @@ const StartupScreen = props => {
                 return;
             }
 
+            const expirationTime = expirationDate.getTime() - new Date().getTime();
+
             props.navigation.navigate('Shop');
-            dispatch(authActions.authenticate(userId, token));
+            dispatch(authActions.authenticate(userId, token, expirationTime));
         };
 
         tryLogin();
