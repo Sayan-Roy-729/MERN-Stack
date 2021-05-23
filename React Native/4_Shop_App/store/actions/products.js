@@ -6,7 +6,9 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 export const fetchProducts = () => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const userId = getState().auth.userId;
+
         try {
             const response = await fetch(
                 'https://flutter-55717-default-rtdb.firebaseio.com/products.json'
@@ -23,7 +25,7 @@ export const fetchProducts = () => {
                 loadedProducts.push(
                     new Product(
                         key,
-                        'u1',
+                        resData[key].ownerId,
                         resData[key].title,
                         resData[key].imageUrl,
                         resData[key].description,
@@ -31,7 +33,13 @@ export const fetchProducts = () => {
                     )
                 );
             }
-            dispatch({ type: SET_PRODUCTS, products: loadedProducts });
+            dispatch({
+                type: SET_PRODUCTS,
+                products: loadedProducts,
+                userProducts: loadedProducts.filter(
+                    (prod) => prod.ownerId === userId
+                ),
+            });
         } catch (error) {
             // send to custom analytics server
             throw error;
@@ -40,9 +48,10 @@ export const fetchProducts = () => {
 };
 
 export const deleteProduct = (productId) => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
         const response = await fetch(
-            `https://flutter-55717-default-rtdb.firebaseio.com/products/${productId}.json`,
+            `https://flutter-55717-default-rtdb.firebaseio.com/products/${productId}.json?auth=${token}`,
             {
                 method: 'DELETE',
             }
@@ -57,9 +66,12 @@ export const deleteProduct = (productId) => {
 };
 
 export const createProduct = (title, description, imageUrl, price) => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
+        const userId = getState().auth.userId;
+
         const response = await fetch(
-            'https://flutter-55717-default-rtdb.firebaseio.com/products.json',
+            `https://flutter-55717-default-rtdb.firebaseio.com/products.json?auth=${token}`,
             {
                 method: 'POST',
                 headers: {
@@ -70,6 +82,7 @@ export const createProduct = (title, description, imageUrl, price) => {
                     description,
                     imageUrl,
                     price,
+                    ownerId: userId,
                 }),
             }
         );
@@ -84,15 +97,18 @@ export const createProduct = (title, description, imageUrl, price) => {
                 description,
                 imageUrl,
                 price,
+                ownerId: userId,
             },
         });
     };
 };
 
 export const updateProduct = (id, title, description, imageUrl) => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const token = getState().auth.token;
+
         const response = await fetch(
-            `https://flutter-55717-default-rtdb.firebaseio.com/products/${id}.json`,
+            `https://flutter-55717-default-rtdb.firebaseio.com/products/${id}.json?auth=${token}`,
             {
                 method: 'PATCH',
                 headers: {

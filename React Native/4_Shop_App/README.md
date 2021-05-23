@@ -115,3 +115,98 @@ import { LinearGradient } from 'expo-linear-gradient'; // npm install --save exp
     </View>
 </LinearGradient>
 ```
+
+## Auto Login (`AsyncStorage`):
+
+### Create methods to store the token into user device (Auth.js Action redux file):
+
+```js
+import AsyncStorage from '@react-native-async-storage/async-storage';
+// expo install @react-native-async-storage/async-storage
+
+// For when the app will restart, this action will be called
+export const authenticate = (userId, token) => {
+    return { type: AUTHENTICATE, userId: userId, token: token };
+};
+
+export const signUp = (requiredData) => {
+    return async dispatch => {
+        // ... some sign up code
+        dispatch(...);
+
+        // Call the func to store the data
+        const expirationDate = new Date(
+            new Date().getTime() + parseInt(resData.expiresIn) * 1000
+        );
+        saveDataToStorage(resData.idToken, resData, localId, expirationDate);
+    };
+};
+
+const saveDataToStorage = (token, userId, expirationDate) => {
+    AsyncStorage.setItem(
+        'userData',
+        JSON.stringify({
+            token: token,
+            userId: userId,
+            expiryDate: expirationDate.toISOString(),
+        })
+    );
+};
+```
+
+### Auto Login Code or Screen:
+
+```js
+import React, { useEffect } from 'react';
+import { View, ActivityIndicator, StyleSheet, } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+
+import { Colors } from '../constants/Colors';
+import * as authActions from '../store/actions/auth';
+
+const StartupScreen = props => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const tryLogin = async () => {
+            const userData = await AsyncStorage.getItem('userData');
+            if (!userData) {
+                props.navigation.navigate('Auth');
+                return;
+            }
+            const transformedData = JSON.parse(userData);
+            const {token, userId, expiryDate} = transformedData;
+            const expirationDate = new Date(expiryDate);
+
+            // Return to the authentication screen
+            if (expirationDate <= new Date() || !token || !userId) {
+                props.navigation.navigate('Auth');
+                return;
+            }
+
+            props.navigation.navigate('Shop');
+            // The code defined the above code section
+            dispatch(authActions.authenticate(userId, token));
+        };
+
+        tryLogin();
+    }, [dispatch]);
+
+    return (
+        <View style = {styles.screen}>
+            <ActivityIndicator size='large' color = {Colors.primary}/>
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    screen: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});
+
+export default StartupScreen;
+```
