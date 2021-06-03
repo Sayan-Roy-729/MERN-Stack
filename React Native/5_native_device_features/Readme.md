@@ -271,3 +271,189 @@ export const addPlace = (title, image) => {
 ```
 
 ### Fetching Data from the Local Database:
+
+Define the method
+```js
+import * as SQlite from 'expo-sqlite';
+
+const db = SQlite.openDatabase('places.db');
+
+// create new database
+export const init = () => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                'CREATE TABLE IF NOT EXISTS places (id INTEGER PRIMARY KEY NOT NULL, title TEXT NOT NULL, imageUri TEXT NOT NULL, address TEXT NOT NULL, lat REAL NOT NULL, lng REAL NOT NULL);',
+                [],
+                () => {
+                    resolve();
+                },
+                (_, err) => {
+                    reject(err);
+                }
+            );
+        });
+    });
+
+    return promise;
+};
+
+// insert into the database
+export const insertPlace = (title, imageUri, address, lat, lng) => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                `INSERT INTO places (title, imageUri, address, lat, lng) VALUES (?, ?, ?, ?, ?);`,
+                [title, imageUri, address, lat, lng],
+                (_, result) => {
+                    resolve(result);
+                },
+                (_, err) => {
+                    reject(err);
+                }
+            );
+        });
+    });
+
+    return promise;
+};
+
+// Fetch from the database
+export const fetchPlaces = () => {
+    const promise = new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                `SELECT * FROM places`,
+                [],
+                (_, result) => {
+                    resolve(result);
+                },
+                (_, err) => {
+                    reject(err);
+                }
+            );
+        });
+    });
+
+    return promise;
+};
+```
+Execute the method
+
+```js
+import { fetchPlaces } from '../helpers/db';
+
+export const loadPlaces = () => {
+    return async (dispatch) => {
+        try {
+            const dbResult = await fetchPlaces();
+            console.log(dbResult);
+
+            dispatch({ type: SET_PLACES, places: dbResult.rows._array });
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    };
+};
+```
+
+## User Location:
+
+```js
+import React, { useState } from 'react';
+import {
+    StyleSheet,
+    View,
+    Button,
+    Text,
+    ActivityIndicator,
+    Alert,
+} from 'react-native';
+import * as Location from 'expo-location'; // expo install expo-location
+import * as Permissions from 'expo-permissions'; // expo install expo-permissions
+
+import Colors from '../constants/Colors';
+
+const LocationPicker = (props) => {
+    const [isFetching, setIsFetching] = useState(false);
+    const [pickedLocation, setPickedLocation] = useState();
+
+    const verifyPermissions = async () => {
+        const result = await Permissions.askAsync(Permissions.LOCATION);
+
+        if (result.status !== 'granted') {
+            Alert.alert(
+                'Insufficient permissions!',
+                'You need to grant location permissions to use this app.',
+                [{ text: 'Okay' }]
+            );
+            return false;
+        }
+        return true;
+    };
+
+    const getLocationHandler = async () => {
+        const hasPermission = await verifyPermissions();
+
+        if (!hasPermission) {
+            return;
+        }
+
+        try {
+            setIsFetching(true);
+            const location = await Location.getCurrentPositionAsync({ timeout: 5000 });
+
+            setPickedLocation({
+                lat: location.coords.latitude,
+                lng: location.coords.longitude,
+            });
+        } catch (err) {
+            Alert.alert(
+                'Could not fetch location!',
+                'please try again later or pick a location on the map.',
+                [{ text: 'Okay' }]
+            );
+        }
+
+        setIsFetching(false);
+    };
+
+    return (
+        <View style={styles.locationPicker}>
+            <View style={styles.mapPreview}>
+                {
+                    isFetching ? <ActivityIndicator size = 'large' color = {Colors.primary}/> : <Text>No location chosen yet!</Text>
+                }
+            </View>
+            <Button
+                title="Get Location"
+                color={Colors.primary}
+                onPress={getLocationHandler}
+            />
+        </View>
+    );
+};
+
+const styles = StyleSheet.create({
+    locationPicker: {
+        marginBottom: 15,
+    },
+    mapPreview: {
+        marginBottom: 10,
+        width: '100%',
+        height: 150,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});
+
+export default LocationPicker;
+```
+
+https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=600x300&maptype=roadmap
+&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318
+&markers=color:red%7Clabel:C%7C40.718217,-73.998284
+&key=YOUR_API_KEY
