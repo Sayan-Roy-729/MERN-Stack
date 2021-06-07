@@ -1,0 +1,14 @@
+{
+  "name": "docker-tutorial",
+  "version": "1.0.0",
+  "description": "This is docker tutorial",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sayan Roy",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
